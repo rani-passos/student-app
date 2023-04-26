@@ -145,6 +145,7 @@ export const Aula: React.FC = () => {
   };
 
   function renderiframe(video: string, x = '640', y = '360') {
+    const isPanda = video.includes('pandavideo');
     return (
       <Box
         sx={{ mb: 4 }}
@@ -155,13 +156,25 @@ export const Aula: React.FC = () => {
         }}
         key={video}
       >
-        <iframe
-          src={'https://player.vimeo.com/video/' + video.split('/')[3]}
-          width={x}
-          height={y}
-          allow="autoplay; fullscreen"
-          allowFullScreen
-        ></iframe>
+        
+        {isPanda ? (
+          <iframe id={`panda-${video.split('?v=')[1]}`} 
+            src={video} 
+            style={{border: 'none'}}
+            allow='accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture' 
+            allowFullScreen
+            width={x} 
+            height={y} 
+          ></iframe>
+        ) : (
+          <iframe
+            src={'https://player.vimeo.com/video/' + video.split('/')[3]}
+            width={x}
+            height={y}
+            allow='autoplay; fullscreen'
+            allowFullScreen
+          ></iframe>
+        )}
       </Box>
     );
   }
@@ -420,8 +433,8 @@ export const Aula: React.FC = () => {
       } else {
         setTitle(result.course.title);
         setModules(result.course.capsules);
-        setActiveLesson(modules[0].lessons[0].id);
-        setActiveModule(modules[0].id);
+        setActiveLesson(result.course.capsules[0].lessons[0].id);
+        setActiveModule(result.course.capsules[0].id);
         setIsLoading(false);
       }
       console.log(
