@@ -145,7 +145,44 @@ export const Aula: React.FC = () => {
   };
 
   function renderiframe(video: string, x = '640', y = '360') {
-    const isPanda = video.includes('pandavideo');
+
+    let iFrameSource: any;
+
+    if (video.includes('pandavideo')) {
+      iFrameSource = (
+        <iframe 
+          id={`panda-${video.split('?v=')[1]}`} 
+          src={video} 
+          style={{border: 'none'}}
+          allow='accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture' 
+          allowFullScreen
+          width={x} 
+          height={y} 
+        ></iframe>
+      );
+    } else if (video.includes('youtube')) {
+      iFrameSource = (
+        <iframe 
+          width={x} 
+          height={y} 
+          src={`https://www.youtube.com/embed/${video.split('?v=')[1]}`}
+          title="YouTube video player" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowFullScreen
+        ></iframe>
+      );
+    } else {
+      iFrameSource = (
+        <iframe
+          src={'https://player.vimeo.com/video/' + video.split('/')[3]}
+          width={x}
+          height={y}
+          allow='autoplay; fullscreen'
+          allowFullScreen
+        ></iframe>
+      );
+    }
+
     return (
       <Box
         sx={{ mb: 4 }}
@@ -156,25 +193,7 @@ export const Aula: React.FC = () => {
         }}
         key={video}
       >
-        
-        {isPanda ? (
-          <iframe id={`panda-${video.split('?v=')[1]}`} 
-            src={video} 
-            style={{border: 'none'}}
-            allow='accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture' 
-            allowFullScreen
-            width={x} 
-            height={y} 
-          ></iframe>
-        ) : (
-          <iframe
-            src={'https://player.vimeo.com/video/' + video.split('/')[3]}
-            width={x}
-            height={y}
-            allow='autoplay; fullscreen'
-            allowFullScreen
-          ></iframe>
-        )}
+        {iFrameSource}
       </Box>
     );
   }
@@ -218,7 +237,7 @@ export const Aula: React.FC = () => {
                 ''
               )}
               <Typography variant="body1">Arquivo: {media.name}</Typography>
-              <Link href={`https://ranipassos.com.br${media.file}`}>
+              <Link href={`https://ranipassos.com.br${media.file}`} target='_blank' rel='noopener noreferrer'>
                 <Button
                   sx={{ margin: '16px 0px' }}
                   variant="contained"
