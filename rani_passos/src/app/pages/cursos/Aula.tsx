@@ -161,11 +161,12 @@ export const Aula: React.FC = () => {
         ></iframe>
       );
     } else if (video.includes('youtube')) {
+      const id = video.substring(video.length - 11);
       iFrameSource = (
         <iframe 
           width={x} 
           height={y} 
-          src={`https://www.youtube.com/embed/${video.split('?v=')[1]}`}
+          src={`https://www.youtube.com/embed/${id}`}
           title="YouTube video player" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
           allowFullScreen
