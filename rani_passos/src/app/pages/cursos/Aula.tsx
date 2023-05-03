@@ -146,6 +146,8 @@ export const Aula: React.FC = () => {
 
   function renderiframe(video: string, x = '640', y = '360') {
 
+    console.log(video);
+
     let iFrameSource: any;
 
     if (video.includes('pandavideo')) {
