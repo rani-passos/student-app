@@ -30,7 +30,7 @@ const formatter = new Intl.NumberFormat('pt-BR', {
 });
 
 function formatDate(data: string) {
-  const dataFormatada = new Date(data);
+  const dataFormatada = new Date(data + 'T03:00:00');
   return dataFormatada.toLocaleDateString('pt-BR');
 }
 
@@ -100,7 +100,7 @@ export const Pedidos = () => {
           </TableCell>
           <TableCell align="right">{formatDate(row.access_start)}</TableCell>
 
-          <TableCell align="right">{formatDate(row.access_until)}</TableCell>
+          <TableCell align="right">{row.lifetime ? 'Vitalício' : formatDate(row.access_until)}</TableCell>
           <TableCell align="right">{renderStatus(row.status)}</TableCell>
         </TableRow>
         <TableRow>
