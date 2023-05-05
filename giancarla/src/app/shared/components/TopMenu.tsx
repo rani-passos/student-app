@@ -28,7 +28,7 @@ import { NotificationsService } from '../services/notifications/NotificationsSer
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 
-import logo from 'rani_passos/public/assets/images/logo.svg';
+import logo from 'giancarla/public/assets/images/logo.svg';
 
 type TUser = {
   id: number;
@@ -297,7 +297,7 @@ export const TopMenu = (props: any) => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Abrir Preferencias">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 2 }}>
-                  <Avatar sx={{ bgcolor: 'purple' }} alt="Avatar">
+                  <Avatar sx={{ bgcolor: theme.palette.primary.main }} alt="Avatar">
                     {userName}
                   </Avatar>
                 </IconButton>

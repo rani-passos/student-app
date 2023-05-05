@@ -6,6 +6,7 @@ export interface IOrders {
   access_start: string;
   status: string;
   course: string;
+  lifetime: boolean;
   payment: {
     created_at: string;
     code: string;

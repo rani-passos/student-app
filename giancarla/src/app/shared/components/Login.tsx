@@ -20,7 +20,7 @@ import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
-import logo from 'rani_passos/public/assets/images/logo.svg';
+import logo from 'giancarla/public/assets/images/logo.svg';
 
 export const Login: React.FC = () => {
   const { isAuth } = useAuthContext();

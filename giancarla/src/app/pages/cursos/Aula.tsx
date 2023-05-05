@@ -145,6 +145,45 @@ export const Aula: React.FC = () => {
   };
 
   function renderiframe(video: string, x = '640', y = '360') {
+
+    let iFrameSource: any;
+
+    if (video.includes('pandavideo')) {
+      iFrameSource = (
+        <iframe 
+          id={`panda-${video.split('?v=')[1]}`} 
+          src={video} 
+          style={{border: 'none'}}
+          allow='accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture' 
+          allowFullScreen
+          width={x} 
+          height={y} 
+        ></iframe>
+      );
+    } else if (video.includes('youtube')) {
+      const id = video.substring(video.length - 11);
+      iFrameSource = (
+        <iframe 
+          width={x} 
+          height={y} 
+          src={`https://www.youtube.com/embed/${id}`}
+          title="YouTube video player" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowFullScreen
+        ></iframe>
+      );
+    } else {
+      iFrameSource = (
+        <iframe
+          src={'https://player.vimeo.com/video/' + video.split('/')[3]}
+          width={x}
+          height={y}
+          allow='autoplay; fullscreen'
+          allowFullScreen
+        ></iframe>
+      );
+    }
+
     return (
       <Box
         sx={{ mb: 4 }}
@@ -155,13 +194,7 @@ export const Aula: React.FC = () => {
         }}
         key={video}
       >
-        <iframe
-          src={'https://player.vimeo.com/video/' + video.split('/')[3]}
-          width={x}
-          height={y}
-          allow="autoplay; fullscreen"
-          allowFullScreen
-        ></iframe>
+        {iFrameSource}
       </Box>
     );
   }
