@@ -283,13 +283,6 @@ export const TopMenu = (props: any) => {
                   </Typography>
                 </Button>
               ))}
-              <Button
-                variant="contained"
-                sx={{ paddingLeft: '16px', paddingRight: '16px' }}
-                href="https://www.ranipassos.com.br/courses/assinatura-completa"
-              >
-                Seja Assinante
-              </Button>
             </Box>
 
             {notificationsContent()}

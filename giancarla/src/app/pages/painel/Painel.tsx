@@ -36,7 +36,7 @@ export const Painel = () => {
       <Box
         sx={{
           display: { xs: 'none', md: 'block' },
-          background: 'url(/assets/images/img-breadcrumb.png) top center',
+          background: 'url(/assets/images/img-breadcrumb.png) top left',
           backgroundAttachment: 'fixed',
           backgroundSize: 'cover',
           padding: '48px 0',
