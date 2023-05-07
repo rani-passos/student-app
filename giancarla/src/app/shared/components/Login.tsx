@@ -83,14 +83,6 @@ export const Login: React.FC = () => {
                 justifyContent: 'end',
               }}
             >
-              <Button
-                variant="contained"
-                sx={{ paddingLeft: '16px', paddingRight: '16px' }}
-                href="https://www.ranipassos.com.br/courses/assinatura-completa"
-                target="_blanck"
-              >
-                Seja Assinante
-              </Button>
             </Box>
           </Toolbar>
         </Container>

@@ -104,10 +104,28 @@ const getNotAttended = async (
   }
 };
 
+const PostEssay = async (
+  course_id: number,
+  requestBody: any
+): Promise<any> => {
+  try {
+    const response = await Api.post(
+      `/courses/${course_id}/essays`, requestBody
+    );
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+    return new Error(
+      (error as { message: string }).message || 'Erro ao postar redação.'
+    );
+  }
+};
+
 export const CoursesService = {
   getAll,
   getModulesById,
   getLessonsById,
   getAttended,
   getNotAttended,
+  PostEssay
 };

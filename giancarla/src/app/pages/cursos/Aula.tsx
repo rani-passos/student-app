@@ -3,6 +3,7 @@ import {
   Button,
   CircularProgress,
   Grid,
+  Input,
   LinearProgress,
   Link,
   Paper,
@@ -26,6 +27,7 @@ import {
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 import DownloadIcon from '@mui/icons-material/Download';
+import UploadIcon from '@mui/icons-material/Upload';
 import { useAuthContext } from '../../shared/contexts';
 import CourseContext from '../../shared/contexts/CourseContext';
 import { useCountdown } from '../../shared/hooks';
@@ -95,11 +97,13 @@ export const Aula: React.FC = () => {
   const [title, setTitle] = useState('');
   const [videos, setVideos] = useState<ILesson>();
   const [haveMedias, setHaveMedias] = useState(false);
+  const [haveEssays, setHaveEssays] = useState(true);
   const [aula, setAula] = useState(0);
   const [activeModule, setActiveModule] = useState(0);
   const [activeLesson, setActiveLesson] = useState(0);
   const [attended, setAttended] = useState(false);
   const [open, setOpen] = React.useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const handleClose = () => {
     setOpen(false);
   };
@@ -142,6 +146,39 @@ export const Aula: React.FC = () => {
 
   const module = (data: number) => {
     setActiveModule(data);
+  };
+
+  const handleFileChange = (e: any) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleUpload = () => {
+    if (selectedFile) {
+      //console.log(selectedFile);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        console.log(base64String);
+        const requestBody = {
+          essays: {
+            material: base64String
+          }
+        };
+        CoursesService.PostEssay(Number(id), requestBody).then(
+          (result) => {
+            if (result instanceof Error) {
+              setError(true);
+            } else {
+              console.log('Upload feito com sucesso!');
+            }
+          }
+        );
+      };
+      reader.readAsDataURL(selectedFile);
+
+      // const formData = new FormData();
+      // formData.append('file', selectedFile);
+    }
   };
 
   function renderiframe(video: string, x = '640', y = '360') {
@@ -238,7 +275,7 @@ export const Aula: React.FC = () => {
                 ''
               )}
               <Typography variant="body1">Arquivo: {media.name}</Typography>
-              <Link href={`https://ranipassos.com.br${media.file}`} target='_blank' rel='noopener no referrer'>
+              <Link href={media.file} target='_blank' rel='noopener no referrer'>
                 <Button
                   sx={{ margin: '16px 0px' }}
                   variant="contained"
@@ -261,6 +298,39 @@ export const Aula: React.FC = () => {
             </Paper>
           ))}
         </Box>
+      </Box>
+    );
+  }
+
+  function renderEssays() {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <Typography variant='h6'>Redações</Typography>
+        <Paper
+          elevation={3}
+          sx={{
+            backgroundColor: '#f1f1f1',
+            margin: '8px',
+            padding: '16px',
+            borderRadius: '8px',
+            width: smDown ? '1' : 1 / 2,
+          }}
+          key={0}
+        >
+          <PictureAsPdfIcon color="primary" style={{ margin: '0 4px' }} />
+          <Typography variant="body1">Arquivo: </Typography>
+          <Input type='file' onChange={handleFileChange} />
+          <br></br>
+          <Button
+            disabled={!selectedFile}
+            onClick={handleUpload}
+            sx={{ margin: '16px 0px' }}
+            variant="contained"
+            startIcon={<UploadIcon />}
+          >
+            Subir
+          </Button>
+        </Paper>
       </Box>
     );
   }
@@ -355,6 +425,29 @@ export const Aula: React.FC = () => {
                 >
                   <Box style={{ display: 'flex' }}>
                     {renderMedias(videos?.medias)}
+                  </Box>
+                </Box>
+              </Box>
+            ) : (
+              ''
+            )}
+            {haveEssays ? (
+              <Box
+                style={{
+                  backgroundColor: '#FFF',
+                  maxHeight: '100vh',
+                  width: '100%',
+                }}
+              >
+                <Box
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    padding: '16px',
+                  }}
+                >
+                  <Box style={{ display: 'flex' }}>
+                    {renderEssays()}
                   </Box>
                 </Box>
               </Box>
