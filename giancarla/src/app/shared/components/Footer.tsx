@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import { Divider } from '@mui/material';
-import logo from 'rani_passos/public/assets/images/logo.svg';
+import logo from 'giancarla/public/assets/images/logo.svg';
 
 export const Footer = () => {
   return (
@@ -41,7 +41,7 @@ export const Footer = () => {
                 variant="h5"
                 gutterBottom={false}
               >
-                Informática
+                Português
                 <br />
                 para concursos
               </Typography>
