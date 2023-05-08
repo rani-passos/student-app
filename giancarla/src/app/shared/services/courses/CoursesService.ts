@@ -104,10 +104,25 @@ const getNotAttended = async (
   }
 };
 
+const getEssays = async (course_id: number): Promise<any> => {
+  try {
+    const { data } = await Api.get(
+      `/courses/${course_id}/essays`
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return new Error(
+      (error as { message: string }).message || 'Erro ao buscar redações.'
+    );
+  }
+};
+
 const PostEssay = async (
   course_id: number,
   requestBody: any
 ): Promise<any> => {
+  console.log(requestBody);
   try {
     const response = await Api.post(
       `/courses/${course_id}/essays`, requestBody
@@ -127,5 +142,6 @@ export const CoursesService = {
   getLessonsById,
   getAttended,
   getNotAttended,
+  getEssays,
   PostEssay
 };

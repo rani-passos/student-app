@@ -28,7 +28,7 @@ import { NotificationsService } from '../services/notifications/NotificationsSer
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 
-import logo from 'giancarla/public/assets/images/logo.svg';
+import logo from 'giancarla/public/assets/images/logo.png';
 
 type TUser = {
   id: number;

@@ -97,7 +97,7 @@ export const Aula: React.FC = () => {
   const [title, setTitle] = useState('');
   const [videos, setVideos] = useState<ILesson>();
   const [haveMedias, setHaveMedias] = useState(false);
-  const [haveEssays, setHaveEssays] = useState(true);
+  const [haveEssays, setHaveEssays] = useState(false);
   const [aula, setAula] = useState(0);
   const [activeModule, setActiveModule] = useState(0);
   const [activeLesson, setActiveLesson] = useState(0);
@@ -556,6 +556,15 @@ export const Aula: React.FC = () => {
         activeModule,
         activeLesson
       );
+    });
+
+    CoursesService.getEssays(Number(id)).then((result) => {
+      if (result instanceof Error) {
+        setError(true);
+      } else {
+        console.log(result);
+        result?.length ? setHaveEssays(true) : setHaveEssays(false);
+      }
     });
   }, [id]);
 
