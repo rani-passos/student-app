@@ -12,6 +12,11 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  Alert,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  DialogContentText
 } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -103,12 +108,18 @@ export const Aula: React.FC = () => {
   const [activeLesson, setActiveLesson] = useState(0);
   const [attended, setAttended] = useState(false);
   const [open, setOpen] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isEssayPDF, setIsEssayPDF] = useState(false);
   const handleClose = () => {
     setOpen(false);
   };
   const handleToggle = () => {
     setOpen(!open);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   if (!isAuth) {
@@ -149,18 +160,22 @@ export const Aula: React.FC = () => {
   };
 
   const handleFileChange = (e: any) => {
-    setSelectedFile(e.target.files[0]);
+    const file = e.target.files[0];
+    setSelectedFile(file);
+    if (file && checkFileType(file.name) == 'pdf') {
+      setIsEssayPDF(true);
+    } else {
+      setIsEssayPDF(false);
+    }
   };
 
   const handleUpload = () => {
-    if (selectedFile) {
-      //console.log(selectedFile);
+    if (selectedFile && isEssayPDF) {
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result;
-        console.log(base64String);
         const requestBody = {
-          essays: {
+          essay: {
             material: base64String
           }
         };
@@ -170,14 +185,14 @@ export const Aula: React.FC = () => {
               setError(true);
             } else {
               console.log('Upload feito com sucesso!');
+              setOpenDialog(true);
+              setSelectedFile(null);
+              setIsEssayPDF(false);
             }
           }
         );
       };
       reader.readAsDataURL(selectedFile);
-
-      // const formData = new FormData();
-      // formData.append('file', selectedFile);
     }
   };
 
@@ -320,9 +335,10 @@ export const Aula: React.FC = () => {
           <PictureAsPdfIcon color="primary" style={{ margin: '0 4px' }} />
           <Typography variant="body1">Arquivo: </Typography>
           <Input type='file' onChange={handleFileChange} />
+          {(!isEssayPDF && selectedFile) ? <Alert severity='error'>Favor utilizar um arquivo pdf</Alert> : ''}
           <br></br>
           <Button
-            disabled={!selectedFile}
+            disabled={!isEssayPDF}
             onClick={handleUpload}
             sx={{ margin: '16px 0px' }}
             variant="contained"
@@ -481,6 +497,21 @@ export const Aula: React.FC = () => {
             </h4>
           </Box>
         )}
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Upload realizado com sucesso!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog}>Ok</Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     );
   }
@@ -546,8 +577,9 @@ export const Aula: React.FC = () => {
       } else {
         setTitle(result.course.title);
         setModules(result.course.capsules);
-        setActiveLesson(modules[0].lessons[0].id);
-        setActiveModule(modules[0].id);
+        setActiveLesson(result.course.capsules[0].lessons[0].id);
+        setActiveModule(result.course.capsules[0].id);
+        setHaveEssays(result.course.essay_mentoring === 'yes');
         setIsLoading(false);
       }
       console.log(
@@ -556,15 +588,6 @@ export const Aula: React.FC = () => {
         activeModule,
         activeLesson
       );
-    });
-
-    CoursesService.getEssays(Number(id)).then((result) => {
-      if (result instanceof Error) {
-        setError(true);
-      } else {
-        console.log(result);
-        result?.length ? setHaveEssays(true) : setHaveEssays(false);
-      }
     });
   }, [id]);
 
