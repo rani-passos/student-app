@@ -47,6 +47,13 @@ interface ILesson {
   attended?: boolean;
 }
 
+interface IEssay {
+  id: number;
+  sent_type: string;
+  viewed: boolean;
+  material: string;
+}
+
 // let lastLesson: any = undefined;
 // try {
 //   lastLesson = JSON.parse(sessionStorage.getItem('LESSON') || '');
@@ -102,7 +109,7 @@ export const Aula: React.FC = () => {
   const [title, setTitle] = useState('');
   const [videos, setVideos] = useState<ILesson>();
   const [haveMedias, setHaveMedias] = useState(false);
-  const [haveEssays, setHaveEssays] = useState(false);
+  const [isEssayMentoring, setIsEssayMentoring] = useState(false);
   const [aula, setAula] = useState(0);
   const [activeModule, setActiveModule] = useState(0);
   const [activeLesson, setActiveLesson] = useState(0);
@@ -111,6 +118,7 @@ export const Aula: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isEssayPDF, setIsEssayPDF] = useState(false);
+  const [essayUploaded, setEssayUploaded] = useState<IEssay>();
   const handleClose = () => {
     setOpen(false);
   };
@@ -334,18 +342,24 @@ export const Aula: React.FC = () => {
         >
           <PictureAsPdfIcon color="primary" style={{ margin: '0 4px' }} />
           <Typography variant="body1">Arquivo: </Typography>
-          <Input type='file' onChange={handleFileChange} />
-          {(!isEssayPDF && selectedFile) ? <Alert severity='error'>Favor utilizar um arquivo pdf</Alert> : ''}
-          <br></br>
-          <Button
-            disabled={!isEssayPDF}
-            onClick={handleUpload}
-            sx={{ margin: '16px 0px' }}
-            variant="contained"
-            startIcon={<UploadIcon />}
-          >
-            Subir
-          </Button>
+          {essayUploaded?.material ? (
+            essayUploaded.material.split('/').pop()
+          ) : (
+            <>
+              <Input type='file' onChange={handleFileChange} />
+              {(!isEssayPDF && selectedFile) ? <Alert severity='error'>Favor utilizar um arquivo pdf</Alert> : ''}
+              <br></br>
+              <Button
+                disabled={!isEssayPDF}
+                onClick={handleUpload}
+                sx={{ margin: '16px 0px' }}
+                variant="contained"
+                startIcon={<UploadIcon />}
+              >
+                Subir
+              </Button>
+            </>
+          )}
         </Paper>
       </Box>
     );
@@ -447,7 +461,7 @@ export const Aula: React.FC = () => {
             ) : (
               ''
             )}
-            {haveEssays ? (
+            {isEssayMentoring ? (
               <Box
                 style={{
                   backgroundColor: '#FFF',
@@ -505,7 +519,7 @@ export const Aula: React.FC = () => {
         >
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Upload realizado com sucesso!
+              Arquivo enviado com sucesso!
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -579,7 +593,7 @@ export const Aula: React.FC = () => {
         setModules(result.course.capsules);
         setActiveLesson(result.course.capsules[0].lessons[0].id);
         setActiveModule(result.course.capsules[0].id);
-        setHaveEssays(result.course.essay_mentoring === 'yes');
+        setIsEssayMentoring(result.course.essay_mentoring === 'yes');
         setIsLoading(false);
       }
       console.log(
@@ -588,6 +602,17 @@ export const Aula: React.FC = () => {
         activeModule,
         activeLesson
       );
+    });
+
+    CoursesService.getEssays(Number(id)).then((result) => {
+      if (result instanceof Error) {
+        setError(true);
+      } else {
+        console.log(result);
+        if (result.length) {
+          setEssayUploaded(result[0]);
+        }
+      }
     });
   }, [id]);
 
