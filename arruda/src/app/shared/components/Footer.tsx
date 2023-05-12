@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import { Divider } from '@mui/material';
-import logo from 'rani_passos/public/assets/images/logo.svg';
+import logo from 'arruda/public/assets/images/logo.png';
 
 export const Footer = () => {
   return (

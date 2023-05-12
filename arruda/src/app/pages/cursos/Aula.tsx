@@ -116,19 +116,59 @@ export const Aula: React.FC = () => {
   }
 
   function renderServerVideo(video: string, x = '640', y = '360') {
-    const plyrProps = {
-      source: {
-        type: 'video',
-        sources: [
-          {
-            src: video,
-            type: 'video/mp4',
-            size: 720,
-          },
-        ],
-      },
-      options: undefined, // https://github.com/sampotts/plyr#options
-    };
+
+    let plyrProps: any;
+
+    if (video.includes('pandavideo')) {
+      plyrProps = (
+        <iframe 
+          id={`panda-${video.split('?v=')[1]}`} 
+          src={video} 
+          style={{border: 'none'}}
+          allow='accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture' 
+          allowFullScreen
+          width={x} 
+          height={y} 
+        ></iframe>
+      );
+    } else if (video.includes('youtube')) {
+      const id = video.substring(video.length - 11);
+      plyrProps = (
+        <iframe 
+          width={x} 
+          height={y} 
+          src={`https://www.youtube.com/embed/${id}`}
+          title="YouTube video player" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowFullScreen
+        ></iframe>
+      );
+    } else {
+      plyrProps = (
+        <iframe
+          src={'https://player.vimeo.com/video/' + video.split('/')[3]}
+          width={x}
+          height={y}
+          allow='autoplay; fullscreen'
+          allowFullScreen
+        ></iframe>
+      );
+    }
+
+
+    // const plyrProps = {
+    //   source: {
+    //     type: 'video',
+    //     sources: [
+    //       {
+    //         src: 'https://www.youtube.com/embed/Jx7FHc1VO4Y',
+    //         type: 'video/mp4',
+    //         size: 720,
+    //       },
+    //     ],
+    //   },
+    //   options: undefined, // https://github.com/sampotts/plyr#options
+    // };
 
     return (
       <Box
@@ -136,7 +176,7 @@ export const Aula: React.FC = () => {
         style={{
           position: 'relative',
           overflow: 'hidden',
-          maxWidth: '540px',
+          width: '100%',
           margin: '16px',
         }}
         key={video}
@@ -144,7 +184,8 @@ export const Aula: React.FC = () => {
         {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          <Plyr {...plyrProps} />
+          // <Plyr {...plyrProps} />
+          plyrProps
         }
       </Box>
     );
@@ -437,8 +478,8 @@ export const Aula: React.FC = () => {
       } else {
         setTitle(result.course.title);
         setModules(result.course.capsules);
-        setActiveLesson(modules[0].lessons[0].id);
-        setActiveModule(modules[0].id);
+        setActiveLesson(result.course.capsules[0].lessons[0].id);
+        setActiveModule(result.course.capsules[0].id);
         setIsLoading(false);
       }
       console.log(
