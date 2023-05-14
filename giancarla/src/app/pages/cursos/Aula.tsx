@@ -119,6 +119,7 @@ export const Aula: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isEssayPDF, setIsEssayPDF] = useState(false);
   const [essayUploaded, setEssayUploaded] = useState<IEssay>();
+  const [essayCorrected, setEssayCorrected] = useState<IEssay>();
   const handleClose = () => {
     setOpen(false);
   };
@@ -361,6 +362,33 @@ export const Aula: React.FC = () => {
             </>
           )}
         </Paper>
+        {essayCorrected?.material ? (
+          <>
+            <Typography variant='h6'>Corrigida</Typography>
+            <Paper
+              elevation={3}
+              sx={{
+                backgroundColor: '#f1f1f1',
+                margin: '8px',
+                padding: '16px',
+                borderRadius: '8px',
+                width: smDown ? '1' : 1 / 2,
+              }}
+              key={0}
+            >
+              <PictureAsPdfIcon color="primary" style={{ margin: '0 4px' }} />
+              <Link href={essayCorrected.material} target='_blank' rel='noopener no referrer'>
+                <Button
+                  sx={{ margin: '16px 0px' }}
+                  variant="contained"
+                  startIcon={<DownloadIcon />}
+                >
+                  Baixar
+                </Button>
+              </Link>
+            </Paper>
+          </>
+        ) : ('')}
       </Box>
     );
   }
@@ -608,9 +636,13 @@ export const Aula: React.FC = () => {
       if (result instanceof Error) {
         setError(true);
       } else {
-        console.log(result);
-        if (result.length) {
-          setEssayUploaded(result[0]);
+        const essayCorrected = result.find((essay: any) => essay.sent_type === 'Teacher');
+        const essaySubmitted = result.find((essay: any) => essay.sent_type === 'User');
+        if (essayCorrected) {
+          setEssayCorrected(essayCorrected);
+        }
+        if (essaySubmitted) {
+          setEssayUploaded(essaySubmitted);
         }
       }
     });

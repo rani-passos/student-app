@@ -25,7 +25,7 @@ export const Contador = ({ date }: any) => {
       <Grid item xs={2} md={2} lg={2}>
         <Item>
           {' '}
-          <Typography variant={smDown ? 'h6' : 'h3'}>{day}</Typography>
+          <Typography variant={smDown ? 'h6' : 'h3'}>{day ? day : '-'}</Typography>
           <Typography>Dias</Typography>
         </Item>
       </Grid>
@@ -44,7 +44,7 @@ export const Contador = ({ date }: any) => {
       <Grid item xs={2} md={2} lg={2}>
         <Item>
           {' '}
-          <Typography variant={smDown ? 'h6' : 'h3'}>{hour}</Typography>
+          <Typography variant={smDown ? 'h6' : 'h3'}>{hour ? hour : '-'}</Typography>
           <Typography>Horas</Typography>
         </Item>
       </Grid>
@@ -63,7 +63,7 @@ export const Contador = ({ date }: any) => {
       <Grid item xs={3} md={2} lg={2}>
         <Item>
           {' '}
-          <Typography variant={smDown ? 'h6' : 'h3'}>{minute}</Typography>
+          <Typography variant={smDown ? 'h6' : 'h3'}>{minute ? minute : '-'}</Typography>
           <Typography>Minutos</Typography>
         </Item>
       </Grid>
@@ -82,7 +82,7 @@ export const Contador = ({ date }: any) => {
       <Grid item xs={3} md={2} lg={2}>
         <Item>
           {' '}
-          <Typography variant={smDown ? 'h6' : 'h3'}>{second}</Typography>
+          <Typography variant={smDown ? 'h6' : 'h3'}>{second ? second : '-'}</Typography>
           <Typography>Segundos</Typography>
         </Item>
       </Grid>
