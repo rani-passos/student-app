@@ -329,7 +329,7 @@ export const Aula: React.FC = () => {
   function renderEssays() {
     return (
       <Box sx={{ width: '100%' }}>
-        <Typography variant='h6'>Redações</Typography>
+        <Typography variant='h6'>Redação para Correção</Typography>
         <Paper
           elevation={3}
           sx={{
@@ -364,7 +364,7 @@ export const Aula: React.FC = () => {
         </Paper>
         {essayCorrected?.material ? (
           <>
-            <Typography variant='h6'>Corrigida</Typography>
+            <Typography variant='h6'>Correção</Typography>
             <Paper
               elevation={3}
               sx={{
@@ -377,7 +377,7 @@ export const Aula: React.FC = () => {
               key={0}
             >
               <PictureAsPdfIcon color="primary" style={{ margin: '0 4px' }} />
-              <Link href={essayCorrected.material} target='_blank' rel='noopener no referrer'>
+              <Link href={`https://giancarlabombonato.com.br${essayCorrected.material}`} target='_blank' rel='noopener no referrer'>
                 <Button
                   sx={{ margin: '16px 0px' }}
                   variant="contained"
