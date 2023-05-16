@@ -49,6 +49,7 @@ interface ILesson {
 
 interface IEssay {
   id: number;
+  capsule_id: number;
   sent_type: string;
   viewed: boolean;
   material: string;
@@ -118,6 +119,7 @@ export const Aula: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isEssayPDF, setIsEssayPDF] = useState(false);
+  const [uploadDisabled, setUploadDisabled] = useState(true);
   const [essayUploaded, setEssayUploaded] = useState<IEssay>();
   const [essayCorrected, setEssayCorrected] = useState<IEssay>();
   const handleClose = () => {
@@ -173,13 +175,16 @@ export const Aula: React.FC = () => {
     setSelectedFile(file);
     if (file && checkFileType(file.name) == 'pdf') {
       setIsEssayPDF(true);
+      setUploadDisabled(false);
     } else {
       setIsEssayPDF(false);
+      setUploadDisabled(true);
     }
   };
 
-  const handleUpload = () => {
+  const handleUpload = (e: any) => {
     if (selectedFile && isEssayPDF) {
+      setUploadDisabled(true);
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result;
@@ -188,7 +193,7 @@ export const Aula: React.FC = () => {
             material: base64String
           }
         };
-        CoursesService.PostEssay(Number(id), requestBody).then(
+        CoursesService.PostEssay(Number(id), activeModule, requestBody).then(
           (result) => {
             if (result instanceof Error) {
               setError(true);
@@ -351,7 +356,7 @@ export const Aula: React.FC = () => {
               {(!isEssayPDF && selectedFile) ? <Alert severity='error'>Favor utilizar um arquivo pdf</Alert> : ''}
               <br></br>
               <Button
-                disabled={!isEssayPDF}
+                disabled={uploadDisabled}
                 onClick={handleUpload}
                 sx={{ margin: '16px 0px' }}
                 variant="contained"
@@ -631,21 +636,6 @@ export const Aula: React.FC = () => {
         activeLesson
       );
     });
-
-    CoursesService.getEssays(Number(id)).then((result) => {
-      if (result instanceof Error) {
-        setError(true);
-      } else {
-        const essayCorrected = result.find((essay: any) => essay.sent_type === 'Teacher');
-        const essaySubmitted = result.find((essay: any) => essay.sent_type === 'User');
-        if (essayCorrected) {
-          setEssayCorrected(essayCorrected);
-        }
-        if (essaySubmitted) {
-          setEssayUploaded(essaySubmitted);
-        }
-      }
-    });
   }, [id]);
 
   useEffect(() => {
@@ -669,6 +659,28 @@ export const Aula: React.FC = () => {
       redirect('/');
     }
   }, [error]);
+
+  useEffect(() => {
+    CoursesService.getEssays(Number(id), activeModule).then((result) => {
+      if (result instanceof Error) {
+        setError(true);
+      } else {
+        console.log(result);
+        const essayCorrected = result.find((essay: any) => essay.sent_type === 'Teacher' && essay.capsule_id === activeModule);
+        const essaySubmitted = result.find((essay: any) => essay.sent_type === 'User' && essay.capsule_id === activeModule);
+        if (essayCorrected) {
+          setEssayCorrected(essayCorrected);
+        } else {
+          setEssayCorrected(undefined);
+        }
+        if (essaySubmitted) {
+          setEssayUploaded(essaySubmitted);
+        } else {
+          setEssayUploaded(undefined);
+        }
+      }
+    });
+  }, [activeModule]);
 
   return (
     // <CourseContext.Provider value={['teste']}>

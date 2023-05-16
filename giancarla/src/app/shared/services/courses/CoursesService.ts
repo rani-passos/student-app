@@ -104,10 +104,10 @@ const getNotAttended = async (
   }
 };
 
-const getEssays = async (course_id: number): Promise<any> => {
+const getEssays = async (course_id: number, module_id: number): Promise<any> => {
   try {
     const { data } = await Api.get(
-      `/courses/${course_id}/essays`
+      `/courses/${course_id}/capsules/${module_id}/essays`
     );
     return data;
   } catch (error) {
@@ -120,12 +120,13 @@ const getEssays = async (course_id: number): Promise<any> => {
 
 const PostEssay = async (
   course_id: number,
+  module_id: number,
   requestBody: any
 ): Promise<any> => {
   console.log(requestBody);
   try {
     const response = await Api.post(
-      `/courses/${course_id}/essays`, requestBody
+      `/courses/${course_id}/capsules/${module_id}/essays`, requestBody
     );
     console.log(response);
   } catch (error) {
