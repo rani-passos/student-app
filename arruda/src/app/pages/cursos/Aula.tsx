@@ -263,7 +263,7 @@ export const Aula: React.FC = () => {
                 ''
               )}
               <Typography variant="body1">Arquivo: {media.name}</Typography>
-              <Link href={`https://ranipassos.com.br${media.file}`}>
+              <Link href={`https://profandrearruda.com.br${media.file}`} target='_blank' rel='noopener no referrer'>
                 <Button
                   sx={{ margin: '16px 0px' }}
                   variant="contained"
