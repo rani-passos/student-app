@@ -20,7 +20,7 @@ import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
-import logo from 'rani_passos/public/assets/images/logo.svg';
+import logo from 'filipe/public/assets/images/logo.png';
 
 export const Login: React.FC = () => {
   const { isAuth } = useAuthContext();
@@ -83,14 +83,6 @@ export const Login: React.FC = () => {
                 justifyContent: 'end',
               }}
             >
-              <Button
-                variant="contained"
-                sx={{ paddingLeft: '16px', paddingRight: '16px' }}
-                href="https://www.ranipassos.com.br/courses/assinatura-completa"
-                target="_blanck"
-              >
-                Seja Assinante
-              </Button>
             </Box>
           </Toolbar>
         </Container>

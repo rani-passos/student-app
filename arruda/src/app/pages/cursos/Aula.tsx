@@ -30,9 +30,6 @@ import { useAuthContext } from '../../shared/contexts';
 import CourseContext from '../../shared/contexts/CourseContext';
 import { useCountdown } from '../../shared/hooks';
 
-import Plyr from 'plyr-react';
-import 'plyr-react/plyr.css';
-
 interface ILesson {
   id: number;
   title: string;

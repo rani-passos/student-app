@@ -145,6 +145,45 @@ export const Aula: React.FC = () => {
   };
 
   function renderiframe(video: string, x = '640', y = '360') {
+
+    let plyrProps: any;
+
+    if (video.includes('pandavideo')) {
+      plyrProps = (
+        <iframe 
+          id={`panda-${video.split('?v=')[1]}`} 
+          src={video} 
+          style={{border: 'none'}}
+          allow='accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture' 
+          allowFullScreen
+          width={x} 
+          height={y} 
+        ></iframe>
+      );
+    } else if (video.includes('youtube')) {
+      const id = video.substring(video.length - 11);
+      plyrProps = (
+        <iframe 
+          width={x} 
+          height={y} 
+          src={`https://www.youtube.com/embed/${id}`}
+          title="YouTube video player" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowFullScreen
+        ></iframe>
+      );
+    } else {
+      plyrProps = (
+        <iframe
+          src={'https://player.vimeo.com/video/' + video.split('/')[3]}
+          width={x}
+          height={y}
+          allow='autoplay; fullscreen'
+          allowFullScreen
+        ></iframe>
+      );
+    }
+
     return (
       <Box
         sx={{ mb: 4 }}
@@ -155,13 +194,9 @@ export const Aula: React.FC = () => {
         }}
         key={video}
       >
-        <iframe
-          src={'https://player.vimeo.com/video/' + video.split('/')[3]}
-          width={x}
-          height={y}
-          allow="autoplay; fullscreen"
-          allowFullScreen
-        ></iframe>
+        {
+          plyrProps
+        }
       </Box>
     );
   }
@@ -205,7 +240,7 @@ export const Aula: React.FC = () => {
                 ''
               )}
               <Typography variant="body1">Arquivo: {media.name}</Typography>
-              <Link href={`https://ranipassos.com.br${media.file}`}>
+              <Link href={`http://filipeavila.com${media.file}`} target='_blank' rel='noopener no referrer'>
                 <Button
                   sx={{ margin: '16px 0px' }}
                   variant="contained"
@@ -420,8 +455,8 @@ export const Aula: React.FC = () => {
       } else {
         setTitle(result.course.title);
         setModules(result.course.capsules);
-        setActiveLesson(modules[0].lessons[0].id);
-        setActiveModule(modules[0].id);
+        setActiveLesson(result.course.capsules[0].lessons[0].id);
+        setActiveModule(result.course.capsules[0].id);
         setIsLoading(false);
       }
       console.log(

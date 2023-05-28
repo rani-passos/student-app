@@ -17,15 +17,15 @@ const DraculaColors = {
 const Dark = createTheme({
   palette: {
     primary: {
-      main: '#bd93f9',
+      main: '#f6a304',
       dark: DraculaColors.purple,
-      light: '#bd93f9',
+      light: '#f6a304',
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#6272a4',
-      dark: '#6272a4',
-      light: '#6272a4',
+      main: '#f6a304',
+      dark: '#f6a304',
+      light: '#f6a304',
       contrastText: '#ffffff',
     },
     background: {
