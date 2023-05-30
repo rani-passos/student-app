@@ -290,7 +290,7 @@ export const TopMenu = (props: any) => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Abrir Preferencias">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 2 }}>
-                  <Avatar sx={{ bgcolor: 'purple' }} alt="Avatar">
+                  <Avatar sx={{ bgcolor: '#f6a304' }} alt="Avatar">
                     {userName}
                   </Avatar>
                 </IconButton>
