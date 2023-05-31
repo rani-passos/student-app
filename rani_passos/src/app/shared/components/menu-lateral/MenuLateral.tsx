@@ -39,6 +39,7 @@ type Props = {
   curso?: IModules[];
   activeModule: (data: number) => void;
   lesson: (data: ILessons) => void;
+  toggleAulaConcluida: () => void;
 };
 
 interface ILessons {
@@ -57,6 +58,7 @@ export const MenuLateral: React.FC<Props> = ({
   curso,
   lesson,
   activeModule,
+  toggleAulaConcluida,
 }) => {
   const data = useContext(CourseContext);
 
@@ -113,6 +115,7 @@ export const MenuLateral: React.FC<Props> = ({
             onClick={() => handleLessonClick(l, id)}
           >
             <Checkbox
+              onClick={() => toggleAulaConcluida()}
               icon={<RadioButtonUncheckedIcon />}
               checkedIcon={<VerifiedIcon />}
               checked={l.attended}

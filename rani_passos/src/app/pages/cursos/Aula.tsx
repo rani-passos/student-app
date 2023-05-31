@@ -392,8 +392,10 @@ export const Aula: React.FC = () => {
     );
   }
   function toggleAulaConcluida() {
-    if (activeLesson === 0 || activeModule === 0) return;
-    !attended ? handleAulaConcluida() : handleNaoAulaConcluida();
+    setTimeout(() => {
+      if (activeLesson === 0 || activeModule === 0) return;
+      !attended ? handleAulaConcluida() : handleNaoAulaConcluida();
+    }, 200);
   }
 
   function handleAulaConcluida() {
@@ -495,6 +497,7 @@ export const Aula: React.FC = () => {
       curso={modules}
       lesson={lesson}
       activeModule={module}
+      toggleAulaConcluida={toggleAulaConcluida}
     >
       <Grid container width={'100%'}>
         {isLoading ? (
