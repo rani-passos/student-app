@@ -416,7 +416,7 @@ export const Aula: React.FC = () => {
               {modules.length <= 0 ? 'Sem Aulas ainda!' : ''}
               <Typography variant="h5">{videos?.title}</Typography>
               <Button variant="outlined" onClick={toggleAulaConcluida}>
-                {attended ? 'Desmarcar ' : 'Marcar '} {'como concluída'}
+                {attended && videos.attended ? 'Desmarcar ' : 'Marcar '} {'como concluída'}
               </Button>
             </Box>
             {haveVideo() ? (
@@ -569,10 +569,12 @@ export const Aula: React.FC = () => {
     }, 200);
   }
 
-  function handleAulaConcluida() {
-    setAttended(true);
+  function handleAulaConcluida(m: number = activeModule, l: number = activeLesson) {
+    if (l === activeLesson) {
+      setAttended(true);
+    }
     setIsLoading(true);
-    CoursesService.getAttended(Number(id), activeModule, activeLesson).then(
+    CoursesService.getAttended(Number(id), m, l).then(
       (result) => {
         if (result instanceof Error) {
           setError(true);
@@ -592,11 +594,13 @@ export const Aula: React.FC = () => {
     );
     setIsLoading(false);
   }
-  function handleNaoAulaConcluida() {
-    setAttended(false);
+  function handleNaoAulaConcluida(m: number = activeModule, l: number = activeLesson) {
+    if (l === activeLesson) {
+      setAttended(false);
+    }
 
     setIsLoading(true);
-    CoursesService.getNotAttended(Number(id), activeModule, activeLesson).then(
+    CoursesService.getNotAttended(Number(id), m, l).then(
       (result) => {
         if (result instanceof Error) {
           setError(true);
@@ -691,7 +695,8 @@ export const Aula: React.FC = () => {
       curso={modules}
       lesson={lesson}
       activeModule={module}
-      toggleAulaConcluida={toggleAulaConcluida}
+      handleAulaConcluida={handleAulaConcluida}
+      handleNaoAulaConcluida={handleNaoAulaConcluida}
     >
       <Grid container width={'100%'}>
         {isLoading ? (
