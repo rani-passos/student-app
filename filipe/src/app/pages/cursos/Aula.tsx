@@ -150,25 +150,25 @@ export const Aula: React.FC = () => {
 
     if (video.includes('pandavideo')) {
       plyrProps = (
-        <iframe 
-          id={`panda-${video.split('?v=')[1]}`} 
-          src={video} 
+        <iframe
+          id={`panda-${video.split('?v=')[1]}`}
+          src={video}
           style={{border: 'none'}}
-          allow='accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture' 
+          allow='accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture'
           allowFullScreen
-          width={x} 
-          height={y} 
+          width={x}
+          height={y}
         ></iframe>
       );
     } else if (video.includes('youtube')) {
       const id = video.substring(video.length - 11);
       plyrProps = (
-        <iframe 
-          width={x} 
-          height={y} 
+        <iframe
+          width={x}
+          height={y}
           src={`https://www.youtube.com/embed/${id}`}
-          title="YouTube video player" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         ></iframe>
       );
@@ -240,15 +240,19 @@ export const Aula: React.FC = () => {
                 ''
               )}
               <Typography variant="body1">Arquivo: {media.name}</Typography>
-              <Link href={`https://filipeavila.com${media.file}`} target='_blank' rel='noopener no referrer'>
-                <Button
-                  sx={{ margin: '16px 0px' }}
-                  variant="contained"
-                  startIcon={<DownloadIcon />}
-                >
-                  Baixar
-                </Button>
-              </Link>
+              {checkFileType(media.file) === 'pdf' ? (
+                <Link href={`https://filipeavila.com.br${media.file}`} target='_blank' rel='noopener noreferrer'>
+                  <Button
+                    sx={{ margin: '16px 0px' }}
+                    variant="contained"
+                    startIcon={<DownloadIcon />}
+                  >
+                    Baixar
+                  </Button>
+                </Link>
+              ) : (
+                ''
+              )}
               {checkFileType(media.file) === 'mp3' ? (
                 <Box sx={{ padding: '16px 0px' }}>
                   <Typography variant="body1">Player Online 🔊</Typography>
