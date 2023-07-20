@@ -272,7 +272,7 @@ export const Aula: React.FC = () => {
   function renderClassContent(videos: any) {
     return (
       <Box
-        sx={{ mb: 2, mr: smDown ? 0 : 16, width: '100%', maxWidth: '1124px' }}
+        sx={{ mb: 2, mr: smDown ? 0 : 16, width: '100%', maxWidth: smDown ? '400px' : '1124px' }}
       >
         {videos?.released ? (
           <Box style={{ minHeight: '100vh', width: '100%' }}>
