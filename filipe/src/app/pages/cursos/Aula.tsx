@@ -241,7 +241,7 @@ export const Aula: React.FC = () => {
               )}
               <Typography variant="body1">Arquivo: {media.name}</Typography>
               {checkFileType(media.file) === 'pdf' ? (
-                <Link href={`https://filipeavila.com.br${media.file}`} target='_blank' rel='noopener noreferrer'>
+                <Link href={`https://filipeavila.com${media.file}`} target='_blank' rel='noopener noreferrer'>
                   <Button
                     sx={{ margin: '16px 0px' }}
                     variant="contained"
