@@ -254,10 +254,12 @@ export const Aula: React.FC = () => {
               {checkFileType(media.file) === 'mp3' ? (
                 <Box sx={{ padding: '16px 0px' }}>
                   <Typography variant="body1">Player Online 🔊</Typography>
-                  <audio controls style={{ color: 'red' }}>
-                    <source src={media.file} type="audio/mpeg" />
-                    Seu Browser não suporta o player, por favor use outro.
-                  </audio>
+                  <div key={media.name}>
+                    <audio controls style={{ color: 'red' }}>
+                      <source src={media.file} type="audio/mpeg" />
+                      Seu Browser não suporta o player, por favor use outro.
+                    </audio>
+                  </div>
                 </Box>
               ) : (
                 ''
