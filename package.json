@@ -1,10 +1,9 @@
 {
   "private": true,
-  "workspaces": ["rani_passos", "arruda", "filipe", "giancarla"],
-    "scripts": {
-      "rani-dev": "yarn workspace rani_passos dev",
-      "arruda-dev": "yarn workspace arruda dev",
-      "filipe-dev": "yarn workspace filipe dev",
-      "giancarla-dev": "yarn workspace giancarla dev"
+  "workspaces": [
+    "rani_passos"
+  ],
+  "scripts": {
+    "rani-dev": "yarn workspace rani_passos dev"
   }
 }
