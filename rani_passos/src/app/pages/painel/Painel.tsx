@@ -6,9 +6,10 @@ import { AuthProvider, useAuthContext } from '../../shared/contexts';
 
 import Cursos from '../cursos/Cursos';
 const pages = [
-  {name: 'Cursos', url: '/'},
-  {name: 'Pedidos', url: '/pedidos'},
-  {name: 'Meus Dados', url: '/minha-conta'}
+  { name: 'Cursos', url: '/' },
+  { name: 'Pedidos', url: '/pedidos' },
+  { name: 'Meus Dados', url: '/minha-conta' },
+  { name: 'ChatGPT', url: '/chat-gpt' },
 ];
 
 export const Painel = () => {
@@ -23,8 +24,8 @@ export const Painel = () => {
   };
 
   function getActualPage() {
-    const pathname = pages.filter((e) =>  e.url === location.pathname);
-    const actualPage = pages.filter(page => page.url === pathname[0].url);
+    const pathname = pages.filter((e) => e.url === location.pathname);
+    const actualPage = pages.filter((page) => page.url === pathname[0].url);
     setActualPage(actualPage[0].name.toUpperCase());
   }
 
@@ -32,7 +33,7 @@ export const Painel = () => {
     getActualPage();
   }, [actualPage]);
 
-  if(!isAuth) {
+  if (!isAuth) {
     return <Navigate to="/login" replace />;
   }
 
@@ -48,8 +49,9 @@ export const Painel = () => {
           backgroundSize: 'cover',
           padding: '48px 0',
           marginTop: { xs: '70px', sm: '70px', md: '70px' },
-        }}>
-        <Typography variant='h5' color='white' textAlign='center'>
+        }}
+      >
+        <Typography variant="h5" color="white" textAlign="center">
           {actualPage}
         </Typography>
       </Box>

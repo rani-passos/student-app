@@ -3,8 +3,15 @@ import { Route, Routes } from 'react-router-dom';
 import Perfil from '../pages/usuario/Perfil';
 import Aula from '../pages/cursos/Aula';
 import { Pedidos } from '../pages';
+import { Chat } from '../pages';
 import { Painel } from '../pages';
-import { Esqueci, Login, NotFound, Registro, Reset } from '../shared/components';
+import {
+  Esqueci,
+  Login,
+  NotFound,
+  Registro,
+  Reset,
+} from '../shared/components';
 export const Rotas = () => {
   return (
     <Routes>
@@ -12,6 +19,7 @@ export const Rotas = () => {
       <Route path="/" element={<Painel />} />
       <Route path="/minha-conta" element={<Perfil />} />
       <Route path="/pedidos" element={<Pedidos />} />
+      <Route path="/chat-gpt" element={<Chat />} />
       <Route path="/curso/:id" element={<Aula />} />
       {/* Rotas Publicas */}
       <Route path="/login" element={<Login />} />
@@ -22,4 +30,3 @@ export const Rotas = () => {
     </Routes>
   );
 };
-

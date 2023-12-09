@@ -11,6 +11,8 @@ import {
   IconButton,
   InputBase,
   Pagination,
+  Alert,
+  AlertTitle,
 } from '@mui/material';
 import { LinearProgress } from '@mui/material';
 import { CoursesService } from '../../shared/services/courses/CoursesService';
@@ -73,9 +75,11 @@ export const Cursos: React.FC = () => {
     return (
       !isLoading &&
       coursesList.length <= 0 && (
-        <Box sx={{ width: '100%' }}>
-          Sem Cursos disponíveis, entre em contato!
-        </Box>
+        <Alert severity="warning">
+          <AlertTitle>Atenção</AlertTitle>
+          Sem Cursos disponíveis.{' '}
+          <strong>Entre em contato com o suporte!</strong>
+        </Alert>
       )
     );
   }
@@ -91,7 +95,7 @@ export const Cursos: React.FC = () => {
                 image={
                   curso.image.includes('https://')
                     ? curso.image
-                    : `${Environment.URL_BASE}${curso.image}`
+                    : `${curso.image}`
                 }
                 alt="imagem do curso"
               />
@@ -159,17 +163,19 @@ export const Cursos: React.FC = () => {
             borderRadius: '8px',
           }}
         >
-          <form onSubmit={handleSubmit}>
-            <InputBase
-              sx={{ margin: '4px 0px 0px 16px', flex: 1 }}
-              placeholder="Pesquisar Cursos"
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </form>
+          {coursesList.length > 0 && (
+            <form onSubmit={handleSubmit}>
+              <InputBase
+                sx={{ margin: '4px 0px 0px 16px', flex: 1 }}
+                placeholder="Pesquisar Cursos"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+              <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            </form>
+          )}
         </Box>
       </Box>
       <Grid

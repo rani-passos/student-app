@@ -87,7 +87,7 @@ export const Login: React.FC = () => {
                 variant="contained"
                 sx={{ paddingLeft: '16px', paddingRight: '16px' }}
                 href="https://www.ranipassos.com.br/courses/assinatura-completa"
-                target="_blanck"
+                target="_blank"
               >
                 Seja Assinante
               </Button>

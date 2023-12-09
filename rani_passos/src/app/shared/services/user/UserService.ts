@@ -18,10 +18,15 @@ interface IUser {
   user: {
     name: string;
     email: string;
-    postal_code: string;
+    posta_code: string;
     password: string;
     cpf: string;
     phone: string;
+    street: string;
+    number: string;
+    city: string;
+    uf: string;
+    neighborhood: string;
   };
 }
 
@@ -64,7 +69,7 @@ const forgotPassword = async (email: string): Promise<any | Error> => {
     });
     return data;
   } catch (error: any) {
-    console.log('erro forgt', error.response.data);
+    console.log('erro forgot', error.response.data);
     return new Error(
       error.response.data.messages || 'Erro ao listar registros.'
     );

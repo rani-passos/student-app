@@ -4,6 +4,7 @@ export interface IOrders {
   id: number;
   access_until: string;
   access_start: string;
+  created_at: string;
   status: string;
   course: string;
   lifetime: boolean;
@@ -14,6 +15,7 @@ export interface IOrders {
     status: string;
     method: string;
     installments: string;
+    handmade: boolean;
   };
 }
 

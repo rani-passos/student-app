@@ -145,30 +145,29 @@ export const Aula: React.FC = () => {
   };
 
   function renderiframe(video: string, x = '640', y = '360') {
-
     let iFrameSource: any;
 
     if (video.includes('pandavideo')) {
       iFrameSource = (
-        <iframe 
-          id={`panda-${video.split('?v=')[1]}`} 
-          src={video} 
-          style={{border: 'none'}}
-          allow='accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture' 
+        <iframe
+          id={`panda-${video.split('?v=')[1]}`}
+          src={video}
+          style={{ border: 'none' }}
+          allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture"
           allowFullScreen
-          width={x} 
-          height={y} 
+          width={x}
+          height={y}
         ></iframe>
       );
     } else if (video.includes('youtube')) {
       const id = video.substring(video.length - 11);
       iFrameSource = (
-        <iframe 
-          width={x} 
-          height={y} 
+        <iframe
+          width={x}
+          height={y}
           src={`https://www.youtube.com/embed/${id}`}
-          title="YouTube video player" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         ></iframe>
       );
@@ -178,7 +177,7 @@ export const Aula: React.FC = () => {
           src={'https://player.vimeo.com/video/' + video.split('/')[3]}
           width={x}
           height={y}
-          allow='autoplay; fullscreen'
+          allow="autoplay; fullscreen"
           allowFullScreen
         ></iframe>
       );
@@ -213,53 +212,67 @@ export const Aula: React.FC = () => {
         <Typography variant="h6">Arquivos</Typography>
         <Box
           sx={{
-            marginLeft: { md: '40px' },
+            marginLeft: { md: '10px' },
             minWidth: '100px',
             height: 'auto',
             minHeight: '250px',
             borderRadius: '10px',
           }}
         >
-          {medias.map((media: any, index: number) => (
-            <Paper
-              elevation={3}
-              sx={{
-                backgroundColor: '#f1f1f1',
-                margin: '8px',
-                padding: '16px',
-                borderRadius: '8px',
-                width: smDown ? '1' : 1 / 2,
-              }}
-              key={index}
-            >
-              {checkFileType(media.file) === 'pdf' ? (
-                <PictureAsPdfIcon color="primary" style={{ margin: '0 4px' }} />
-              ) : (
-                ''
-              )}
-              <Typography variant="body1">Arquivo: {media.name}</Typography>
-              <Link href={`https://ranipassos.com.br${media.file}`} target='_blank' rel='noopener noreferrer'>
-                <Button
-                  sx={{ margin: '16px 0px' }}
-                  variant="contained"
-                  startIcon={<DownloadIcon />}
+          <Grid
+            container
+            spacing={2}
+            sx={{
+              mt: 1,
+            }}
+          >
+            {medias.map((media: any, index: number) => (
+              <Grid item xs={6} key={index}>
+                <Paper
+                  elevation={3}
+                  sx={{
+                    backgroundColor: '#f1f1f1',
+                    padding: '16px',
+                    borderRadius: '8px',
+                  }}
                 >
-                  Baixar
-                </Button>
-              </Link>
-              {checkFileType(media.file) === 'mp3' ? (
-                <Box sx={{ padding: '16px 0px' }}>
-                  <Typography variant="body1">Player Online 🔊</Typography>
-                  <audio controls style={{ color: 'red' }}>
-                    <source src={media.file} type="audio/mpeg" />
-                    Seu Browser não suporta o player, por favor use outro.
-                  </audio>
-                </Box>
-              ) : (
-                ''
-              )}
-            </Paper>
-          ))}
+                  {checkFileType(media.file) === 'pdf' ? (
+                    <PictureAsPdfIcon
+                      color="primary"
+                      style={{ margin: '0 4px' }}
+                    />
+                  ) : (
+                    ''
+                  )}
+                  <Typography variant="body1">Arquivo: {media.name}</Typography>
+                  <Link
+                    href={`https://ranipassos.com.br${media.file}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      sx={{ margin: '16px 0px' }}
+                      variant="contained"
+                      startIcon={<DownloadIcon />}
+                    >
+                      Baixar
+                    </Button>
+                  </Link>
+                  {checkFileType(media.file) === 'mp3' ? (
+                    <Box sx={{ padding: '16px 0px' }}>
+                      <Typography variant="body1">Player Online 🔊</Typography>
+                      <audio controls style={{ color: 'red' }}>
+                        <source src={media.file} type="audio/mpeg" />
+                        Seu Browser não suporta o player, por favor use outro.
+                      </audio>
+                    </Box>
+                  ) : (
+                    ''
+                  )}
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
         </Box>
       </Box>
     );
@@ -338,29 +351,7 @@ export const Aula: React.FC = () => {
             ) : (
               ''
             )}
-            {haveMedias ? (
-              <Box
-                style={{
-                  backgroundColor: '#FFF',
-                  maxHeight: '100vh',
-                  width: '100%',
-                }}
-              >
-                <Box
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    padding: '16px',
-                  }}
-                >
-                  <Box style={{ display: 'flex' }}>
-                    {renderMedias(videos?.medias)}
-                  </Box>
-                </Box>
-              </Box>
-            ) : (
-              ''
-            )}
+            {haveMedias ? <Box>{renderMedias(videos?.medias)}</Box> : ''}
           </Box>
         ) : videos?.released ? (
           <Box

@@ -42,7 +42,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export const Pedidos = () => {
+export const Chat = () => {
   const { isAuth } = useAuthContext();
 
   const [pedidos, setPedidos] = React.useState<IOrders[]>([]);
@@ -50,16 +50,13 @@ export const Pedidos = () => {
 
   function renderStatus(value: string) {
     if (value === 'active') {
-      return <Chip label="ATIVO" color="secondary" variant="filled" />;
+      return <Chip label="Ativo" color="secondary" variant="filled" />;
     }
     if (value === 'inactive') {
-      return <Chip label="INATIVO" color="error" variant="filled" />;
+      return <Chip label="Inativo" color="error" variant="filled" />;
     }
     if (value === 'paid') {
       return <Chip label="PAGO" color="success" variant="outlined" />;
-    }
-    if (value === 'pending') {
-      return <Chip label="PENDENTE" color="primary" variant="outlined" />;
     }
     if (value === 'canceled') {
       return <Chip label="CANCELADO" color="error" variant="outlined" />;
@@ -71,22 +68,15 @@ export const Pedidos = () => {
   function renderMethod(value: string) {
     if (value === 'card') {
       return 'Cartão';
-    } else if (value === 'pix') {
+    }
+    if (value === 'pix') {
       return 'PIX';
-    } else if (value === 'billet') {
+    }
+    if (value === 'billet') {
       return 'Boleto';
-    } else if (value === 'bonus') {
-      return 'Bonûs';
     } else {
       return '-';
     }
-  }
-
-  function courseValidate(value: string) {
-    if (value === 'active' || value === 'inactive' || value === 'paid') {
-      return true;
-    }
-    return false;
   }
 
   function Row(props: { row: IOrders }) {
@@ -108,43 +98,52 @@ export const Pedidos = () => {
           <TableCell component="th" scope="row">
             {row.course}
           </TableCell>
-          <TableCell align="right">{formatDate(row.created_at)}</TableCell>
+          <TableCell align="right">{formatDate(row.access_start)}</TableCell>
+
+          <TableCell align="right">
+            {row.lifetime ? 'Vitalício' : formatDate(row.access_until)}
+          </TableCell>
           <TableCell align="right">{renderStatus(row.status)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
-                {row.payment ? (
-                  <Box>
-                    <Typography variant="h6" gutterBottom component="div">
-                      Dados do Pagamento
-                    </Typography>
-
-                    <Typography variant="subtitle2" gutterBottom>
-                      <b>Método:</b> {renderMethod(row.payment?.method)}
-                    </Typography>
-
-                    <Typography variant="subtitle2" gutterBottom>
-                      <b>Valor ($):</b>{' '}
+                <Typography variant="h6" gutterBottom component="div">
+                  Dados do Pagamento
+                </Typography>
+                <Table size="small" aria-label="purchases">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="right">Método de Pagamento</TableCell>
+                      <TableCell align="right">Valor ($)</TableCell>
+                      <TableCell align="right">Status</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableCell align="right">
+                      {renderMethod(row.payment?.method)}
+                    </TableCell>
+                    <TableCell align="right">
                       {formatter.format((row.payment?.amount | 0) / 100)}
-                    </Typography>
-                  </Box>
-                ) : null}
-
-                {courseValidate(row.status) ? (
-                  <Box>
-                    <Typography variant="subtitle2" gutterBottom>
-                      <b>Acesso Liberado:</b> {formatDate(row.access_start)}
-                    </Typography>
-                    <Typography variant="subtitle2" gutterBottom>
-                      <b>Vencimento:</b>{' '}
-                      {row.lifetime
-                        ? 'Vitalício'
-                        : formatDate(row.access_until)}
-                    </Typography>
-                  </Box>
-                ) : null}
+                    </TableCell>
+                    <TableCell align="right">
+                      {renderStatus(row.payment?.status)}
+                    </TableCell>
+                    {/* {row.history.map((historyRow) => (
+                    <TableRow key={historyRow.date}>
+                      <TableCell component="th" scope="row">
+                        {historyRow.date}
+                      </TableCell>
+                      <TableCell>{historyRow.customerId}</TableCell>
+                      <TableCell align="right">{historyRow.amount}</TableCell>
+                      <TableCell align="right">
+                        {Math.round(historyRow.amount * row.amount * 100) / 100}
+                      </TableCell>
+                    </TableRow>
+                  ))} */}
+                  </TableBody>
+                </Table>
               </Box>
             </Collapse>
           </TableCell>
@@ -176,7 +175,6 @@ export const Pedidos = () => {
     );
   }
   function renderTable() {
-    if (pedidos.length === 0) return;
     return (
       !isLoading && (
         <Box sx={{ flexGrow: 1 }}>
@@ -186,7 +184,8 @@ export const Pedidos = () => {
                 <TableRow>
                   <TableCell>-</TableCell>
                   <TableCell>Curso</TableCell>
-                  <TableCell align="right">Data de Criação</TableCell>
+                  <TableCell align="right">Acesso liberado</TableCell>
+                  <TableCell align="right">Validade</TableCell>
                   <TableCell align="right">Status</TableCell>
                 </TableRow>
               </TableHead>
@@ -213,7 +212,8 @@ export const Pedidos = () => {
       if (result instanceof Error) {
         console.error('Pedidos' + result.message);
       } else {
-        setPedidos(result);
+        const data = result.reverse();
+        setPedidos(data);
       }
     });
   }, []);
@@ -243,4 +243,4 @@ export const Pedidos = () => {
   );
 };
 
-export default Pedidos;
+export default Chat;
