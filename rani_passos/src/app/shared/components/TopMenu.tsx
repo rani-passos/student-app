@@ -75,7 +75,6 @@ export const TopMenu = (props: any) => {
     { name: 'Cursos', url: '/' },
     { name: 'Pedidos', url: '/pedidos' },
     { name: 'Meus Dados', url: '/minha-conta' },
-    { name: 'ChatGPT', url: '/chat-gpt' },
   ];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -327,9 +326,6 @@ export const TopMenu = (props: any) => {
                 </MenuItem>
                 <MenuItem onClick={() => navigate('/minha-conta')}>
                   <Typography>Meus dados</Typography>
-                </MenuItem>
-                <MenuItem onClick={() => navigate('/chat-gpt')}>
-                  <Typography>ChatGPT</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleSair}>
                   <Typography>Sair</Typography>
