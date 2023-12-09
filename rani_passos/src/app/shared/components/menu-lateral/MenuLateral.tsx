@@ -39,8 +39,6 @@ type Props = {
   curso?: IModules[];
   activeModule: (data: number) => void;
   lesson: (data: ILessons) => void;
-  handleAulaConcluida: (m: number, l:number) => void;
-  handleNaoAulaConcluida: (m: number, l:number) => void;
 };
 
 interface ILessons {
@@ -59,8 +57,6 @@ export const MenuLateral: React.FC<Props> = ({
   curso,
   lesson,
   activeModule,
-  handleAulaConcluida,
-  handleNaoAulaConcluida
 }) => {
   const data = useContext(CourseContext);
 
@@ -82,14 +78,6 @@ export const MenuLateral: React.FC<Props> = ({
     console.log('l,m', l.id, m);
     lesson(l);
     activeModule(m);
-  };
-
-  const toggleAulaConcluida = (l: ILessons, m: number) => {
-    if (l.attended) {
-      handleNaoAulaConcluida(m, l.id);
-    } else {
-      handleAulaConcluida(m, l.id);
-    }
   };
 
   function renderModules(m: IModules, index: number) {
@@ -115,22 +103,21 @@ export const MenuLateral: React.FC<Props> = ({
   function renderLessons(l: ILessons, id: number) {
     return (
       <Collapse key={l.id + id} in={open === id} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding sx={{display: 'flex'}}>
-          <Checkbox
-            onClick={() => toggleAulaConcluida(l, id)}
-            icon={<RadioButtonUncheckedIcon />}
-            checkedIcon={<VerifiedIcon />}
-            checked={l.attended}
-            color="success"
-          />
+        <List component="div" disablePadding>
           <ListItemButton
             sx={{
               paddingTop: '2px',
               paddingBottom: '2px',
-              paddingLeft: '36px'
+              paddingLeft: '36px',
             }}
             onClick={() => handleLessonClick(l, id)}
           >
+            <Checkbox
+              icon={<RadioButtonUncheckedIcon />}
+              checkedIcon={<VerifiedIcon />}
+              checked={l.attended}
+              color="success"
+            />
             <ListItemText
               primary={`${l.title}`}
               primaryTypographyProps={{ fontSize: 14 }}

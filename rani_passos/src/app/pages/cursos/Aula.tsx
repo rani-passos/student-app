@@ -152,13 +152,8 @@ export const Aula: React.FC = () => {
         <iframe
           id={`panda-${video.split('?v=')[1]}`}
           src={video}
-<<<<<<< HEAD
           style={{ border: 'none' }}
           allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture"
-=======
-          style={{border: 'none'}}
-          allow='accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture'
->>>>>>> 89dd6fbe4318c583afd50d39fd9b49fad64939c7
           allowFullScreen
           width={x}
           height={y}
@@ -224,7 +219,6 @@ export const Aula: React.FC = () => {
             borderRadius: '10px',
           }}
         >
-<<<<<<< HEAD
           <Grid
             container
             spacing={2}
@@ -279,54 +273,6 @@ export const Aula: React.FC = () => {
               </Grid>
             ))}
           </Grid>
-=======
-          {medias.map((media: any, index: number) => (
-            <Paper
-              elevation={3}
-              sx={{
-                backgroundColor: '#f1f1f1',
-                margin: '8px',
-                padding: '16px',
-                borderRadius: '8px',
-                width: smDown ? '1' : 1 / 2,
-              }}
-              key={index}
-            >
-              {checkFileType(media.file) === 'pdf' ? (
-                <PictureAsPdfIcon color="primary" style={{ margin: '0 4px' }} />
-              ) : (
-                ''
-              )}
-              <Typography variant="body1">Arquivo: {media.name}</Typography>
-              {checkFileType(media.file) === 'pdf' ? (
-                <Link href={`https://ranipassos.com.br${media.file}`} target='_blank' rel='noopener noreferrer'>
-                  <Button
-                    sx={{ margin: '16px 0px' }}
-                    variant="contained"
-                    startIcon={<DownloadIcon />}
-                  >
-                    Baixar
-                  </Button>
-                </Link>
-              ) : (
-                ''
-              )}
-              {checkFileType(media.file) === 'mp3' ? (
-                <Box sx={{ padding: '16px 0px' }}>
-                  <Typography variant="body1">Player Online 🔊</Typography>
-                  <div key={media.name}>
-                    <audio controls style={{ color: 'red' }}>
-                      <source src={media.file} type="audio/mpeg" />
-                      Seu Browser não suporta o player, por favor use outro.
-                    </audio>
-                  </div>
-                </Box>
-              ) : (
-                ''
-              )}
-            </Paper>
-          ))}
->>>>>>> 89dd6fbe4318c583afd50d39fd9b49fad64939c7
         </Box>
       </Box>
     );
@@ -335,7 +281,7 @@ export const Aula: React.FC = () => {
   function renderClassContent(videos: any) {
     return (
       <Box
-        sx={{ mb: 2, mr: smDown ? 0 : 16, width: '100%', maxWidth: smDown ? '400px' : '1124px' }}
+        sx={{ mb: 2, mr: smDown ? 0 : 16, width: '100%', maxWidth: '1124px' }}
       >
         {videos?.released ? (
           <Box style={{ minHeight: '100vh', width: '100%' }}>
@@ -350,7 +296,7 @@ export const Aula: React.FC = () => {
               {modules.length <= 0 ? 'Sem Aulas ainda!' : ''}
               <Typography variant="h5">{videos?.title}</Typography>
               <Button variant="outlined" onClick={toggleAulaConcluida}>
-                {attended && videos.attended ? 'Desmarcar ' : 'Marcar '} {'como concluída'}
+                {attended ? 'Desmarcar ' : 'Marcar '} {'como concluída'}
               </Button>
             </Box>
             {haveVideo() ? (
@@ -437,20 +383,14 @@ export const Aula: React.FC = () => {
     );
   }
   function toggleAulaConcluida() {
-    setTimeout(() => {
-      if (activeLesson === 0 || activeModule === 0) return;
-      !attended ? handleAulaConcluida() : handleNaoAulaConcluida();
-    }, 200);
+    if (activeLesson === 0 || activeModule === 0) return;
+    !attended ? handleAulaConcluida() : handleNaoAulaConcluida();
   }
 
-  function handleAulaConcluida(m: number = activeModule, l: number = activeLesson) {
-
-    if (l === activeLesson) {
-      setAttended(true);
-    }
-
+  function handleAulaConcluida() {
+    setAttended(true);
     setIsLoading(true);
-    CoursesService.getAttended(Number(id), m, l).then(
+    CoursesService.getAttended(Number(id), activeModule, activeLesson).then(
       (result) => {
         if (result instanceof Error) {
           setError(true);
@@ -470,14 +410,11 @@ export const Aula: React.FC = () => {
     );
     setIsLoading(false);
   }
-  function handleNaoAulaConcluida(m: number = activeModule, l: number = activeLesson) {
-
-    if (l === activeLesson) {
-      setAttended(false);
-    }
+  function handleNaoAulaConcluida() {
+    setAttended(false);
 
     setIsLoading(true);
-    CoursesService.getNotAttended(Number(id), m, l).then(
+    CoursesService.getNotAttended(Number(id), activeModule, activeLesson).then(
       (result) => {
         if (result instanceof Error) {
           setError(true);
@@ -549,8 +486,6 @@ export const Aula: React.FC = () => {
       curso={modules}
       lesson={lesson}
       activeModule={module}
-      handleAulaConcluida={handleAulaConcluida}
-      handleNaoAulaConcluida={handleNaoAulaConcluida}
     >
       <Grid container width={'100%'}>
         {isLoading ? (
