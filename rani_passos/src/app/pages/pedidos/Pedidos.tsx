@@ -17,6 +17,8 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {
@@ -44,25 +46,59 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export const Pedidos = () => {
   const { isAuth } = useAuthContext();
-
   const [pedidos, setPedidos] = React.useState<IOrders[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
   function renderStatus(value: string) {
     if (value === 'active') {
-      return <Chip label="ATIVO" color="secondary" variant="filled" />;
+      return (
+        <Chip
+          label="ATIVO"
+          color="secondary"
+          variant="filled"
+          sx={{ width: '100%' }}
+        />
+      );
     }
     if (value === 'inactive') {
-      return <Chip label="INATIVO" color="error" variant="filled" />;
+      return (
+        <Chip
+          label="INATIVO"
+          color="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        />
+      );
     }
     if (value === 'paid') {
-      return <Chip label="PAGO" color="success" variant="outlined" />;
+      return (
+        <Chip
+          label="PAGO"
+          color="success"
+          variant="outlined"
+          sx={{ width: '100%' }}
+        />
+      );
     }
     if (value === 'pending') {
-      return <Chip label="PENDENTE" color="primary" variant="outlined" />;
+      return (
+        <Chip
+          label="PENDENTE"
+          color="primary"
+          variant="outlined"
+          sx={{ width: '100%' }}
+        />
+      );
     }
     if (value === 'canceled') {
-      return <Chip label="CANCELADO" color="error" variant="outlined" />;
+      return (
+        <Chip
+          label="CANCELADO"
+          color="error"
+          variant="outlined"
+          sx={{ width: '100%' }}
+        />
+      );
     } else {
       return '-';
     }
@@ -157,11 +193,10 @@ export const Pedidos = () => {
     if (pedidos.length > 0 && isLoading === false) return;
     return (
       !isLoading && (
-        <Grid item xs={12} md={12} lg={12}>
-          <Item>
-            <Typography variant="h6">Não há registros de Pedidos!</Typography>
-          </Item>
-        </Grid>
+        <Alert severity="warning" sx={{ width: '100%' }}>
+          <AlertTitle>Atenção</AlertTitle>
+          Não há registros de Pedidos!
+        </Alert>
       )
     );
   }
@@ -220,12 +255,26 @@ export const Pedidos = () => {
 
   return (
     <Box>
+      <CssBaseline />
       <TopMenu />
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'block' },
+          background: 'url(/assets/images/img-breadcrumb.png) top center',
+          backgroundAttachment: 'fixed',
+          backgroundSize: 'cover',
+          padding: '48px 0',
+          marginTop: { xs: '70px', sm: '70px', md: '70px' },
+        }}
+      >
+        <Typography variant="h5" color="white" textAlign="center">
+          PEDIDOS
+        </Typography>
+      </Box>
       <Container component="main" maxWidth="md">
-        <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 1,
             marginBottom: 8,
             display: 'flex',
             flexDirection: 'column',

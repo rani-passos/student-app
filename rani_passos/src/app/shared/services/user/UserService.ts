@@ -12,6 +12,7 @@ export interface IUserData {
   created_at: string;
   updated_at: string;
   authentication_token: string;
+  use_chat: boolean;
 }
 
 interface IUser {

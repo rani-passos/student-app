@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 import { useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -75,7 +76,7 @@ export const Cursos: React.FC = () => {
     return (
       !isLoading &&
       coursesList.length <= 0 && (
-        <Alert severity="warning">
+        <Alert severity="warning" sx={{ width: '100%' }}>
           <AlertTitle>Atenção</AlertTitle>
           Sem Cursos disponíveis.{' '}
           <strong>Entre em contato com o suporte!</strong>

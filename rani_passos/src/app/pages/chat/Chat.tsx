@@ -1,169 +1,106 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Footer, TopMenu } from '../../shared/components';
-import { styled } from '@mui/material/styles';
-import { Chip, LinearProgress, Paper } from '@mui/material';
 import { Navigate } from 'react-router-dom';
 import { useAuthContext } from '../../shared/contexts';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {
-  IOrders,
-  OrdersService,
-} from '../../shared/services/orders/OrdersService';
+  Box,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  Alert,
+  AlertTitle,
+  LinearProgress,
+} from '@mui/material';
 
-const formatter = new Intl.NumberFormat('pt-BR', {
-  style: 'currency',
-  currency: 'BRL',
-});
-
-function formatDate(data: string) {
-  const dataFormatada = new Date(data + 'T03:00:00');
-  return dataFormatada.toLocaleDateString('pt-BR');
-}
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(2, 4),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+import { IChats, ChatsService } from '../../shared/services/chats/ChatsService';
+import { IUserData, UserService } from '../../shared/services/user/UserService';
 
 export const Chat = () => {
   const { isAuth } = useAuthContext();
 
-  const [pedidos, setPedidos] = React.useState<IOrders[]>([]);
+  const [chatMessages, setChatMessages] = React.useState<IChats[]>([]);
+  const [userData, setUserData] = React.useState<IUserData>({
+    id: 0,
+    company_id: 0,
+    name: '',
+    birth_date: null,
+    cpf: '',
+    phone: '',
+    status: '',
+    email: '',
+    created_at: '',
+    updated_at: '',
+    authentication_token: '',
+    use_chat: false,
+  });
+  const [newMessage, setNewMessage] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoadingMessages, setIsLoadingMessages] = React.useState(false);
+  const messagesEndRef = React.useRef<HTMLUListElement>(null);
 
-  function renderStatus(value: string) {
-    if (value === 'active') {
-      return <Chip label="Ativo" color="secondary" variant="filled" />;
+  const scrollToBottom = () => {
+    const messagesContainer = messagesEndRef.current;
+    if (messagesContainer) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
-    if (value === 'inactive') {
-      return <Chip label="Inativo" color="error" variant="filled" />;
+  };
+
+  const handleSendMessage = () => {
+    if (!newMessage) return;
+    setIsLoadingMessages(true);
+
+    const data = { question: newMessage, answer: '' };
+    setNewMessage('');
+    ChatsService.create(data).then((result) => {
+      setIsLoadingMessages(false);
+      if (result instanceof Error) {
+        console.error('Chats' + result.message);
+      } else {
+        setChatMessages(result);
+      }
+    });
+  };
+
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSendMessage();
     }
-    if (value === 'paid') {
-      return <Chip label="PAGO" color="success" variant="outlined" />;
-    }
-    if (value === 'canceled') {
-      return <Chip label="CANCELADO" color="error" variant="outlined" />;
-    } else {
-      return '-';
-    }
+  };
+
+  if (!isAuth) {
+    return <Navigate to="/login" replace />;
   }
 
-  function renderMethod(value: string) {
-    if (value === 'card') {
-      return 'Cartão';
-    }
-    if (value === 'pix') {
-      return 'PIX';
-    }
-    if (value === 'billet') {
-      return 'Boleto';
-    } else {
-      return '-';
-    }
-  }
+  React.useEffect(() => {
+    ChatsService.getAll().then((result) => {
+      setIsLoading(false);
+      if (result instanceof Error) {
+        console.error('Chats' + result.message);
+      } else {
+        setChatMessages(result);
+      }
+    });
+  }, []);
 
-  function Row(props: { row: IOrders }) {
-    const { row } = props;
-    const [open, setOpen] = React.useState(false);
+  React.useEffect(() => {
+    setIsLoading(true);
+    UserService.getAll().then((result: IUserData) => {
+      if (result instanceof Error) {
+        console.error('User' + result.message);
+      } else {
+        setUserData(result);
+      }
+    });
+  }, []);
 
-    return (
-      <>
-        <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-          <TableCell>
-            <IconButton
-              aria-label="expand row"
-              size="small"
-              onClick={() => setOpen(!open)}
-            >
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {row.course}
-          </TableCell>
-          <TableCell align="right">{formatDate(row.access_start)}</TableCell>
-
-          <TableCell align="right">
-            {row.lifetime ? 'Vitalício' : formatDate(row.access_until)}
-          </TableCell>
-          <TableCell align="right">{renderStatus(row.status)}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
-                <Typography variant="h6" gutterBottom component="div">
-                  Dados do Pagamento
-                </Typography>
-                <Table size="small" aria-label="purchases">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="right">Método de Pagamento</TableCell>
-                      <TableCell align="right">Valor ($)</TableCell>
-                      <TableCell align="right">Status</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableCell align="right">
-                      {renderMethod(row.payment?.method)}
-                    </TableCell>
-                    <TableCell align="right">
-                      {formatter.format((row.payment?.amount | 0) / 100)}
-                    </TableCell>
-                    <TableCell align="right">
-                      {renderStatus(row.payment?.status)}
-                    </TableCell>
-                    {/* {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">
-                        {Math.round(historyRow.amount * row.amount * 100) / 100}
-                      </TableCell>
-                    </TableRow>
-                  ))} */}
-                  </TableBody>
-                </Table>
-              </Box>
-            </Collapse>
-          </TableCell>
-        </TableRow>
-      </>
-    );
-  }
-
-  function renderNoRows() {
-    if (pedidos.length > 0 && isLoading === false) return;
-    return (
-      !isLoading && (
-        <Grid item xs={12} md={12} lg={12}>
-          <Item>
-            <Typography variant="h6">Não há registros de Pedidos!</Typography>
-          </Item>
-        </Grid>
-      )
-    );
-  }
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [chatMessages, isLoadingMessages]);
 
   function renderLoading() {
     return (
@@ -174,58 +111,91 @@ export const Chat = () => {
       )
     );
   }
-  function renderTable() {
+
+  function renderInformativo() {
     return (
-      !isLoading && (
-        <Box sx={{ flexGrow: 1 }}>
-          <TableContainer component={Paper} sx={{ backgroundColor: '#fff' }}>
-            <Table aria-label="collapsible table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>-</TableCell>
-                  <TableCell>Curso</TableCell>
-                  <TableCell align="right">Acesso liberado</TableCell>
-                  <TableCell align="right">Validade</TableCell>
-                  <TableCell align="right">Status</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {pedidos.map((item) => (
-                  <Row key={item.id} row={item} />
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      )
+      <>
+        {!isLoading && !userData.use_chat ? (
+          <Alert severity="warning" sx={{ marginBottom: 3, width: '100%' }}>
+            <AlertTitle>Aguardem</AlertTitle>
+            Novidades virão por ai.{' '}
+          </Alert>
+        ) : null}
+      </>
     );
   }
 
-  if (!isAuth) {
-    return <Navigate to="/login" replace />;
-  }
+  function renderChat() {
+    return (
+      <Box sx={{ width: '100%', margin: '0 auto' }}>
+        <List
+          sx={{
+            height: 300,
+            overflow: 'auto',
+            bgcolor: 'background.paper',
+          }}
+          ref={messagesEndRef}
+        >
+          {chatMessages.length == 0 && (
+            <ListItem>
+              <ListItemText secondary="Como posso ajudá-lo hoje?" />
+            </ListItem>
+          )}
 
-  React.useEffect(() => {
-    setIsLoading(true);
-    OrdersService.getAll().then((result) => {
-      setIsLoading(false);
-      if (result instanceof Error) {
-        console.error('Pedidos' + result.message);
-      } else {
-        const data = result.reverse();
-        setPedidos(data);
-      }
-    });
-  }, []);
+          {chatMessages.map((message, index) => (
+            <React.Fragment key={index}>
+              <ListItem>
+                <ListItemText primary={message.question} />
+              </ListItem>
+
+              <ListItem>
+                <ListItemText secondary={message.answer} />
+              </ListItem>
+            </React.Fragment>
+          ))}
+
+          {isLoadingMessages && (
+            <Box sx={{ width: '100%', padding: 2 }}>
+              <LinearProgress />
+            </Box>
+          )}
+        </List>
+        <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
+          <TextField
+            fullWidth
+            label="Mensagem ChatGPT..."
+            value={newMessage}
+            disabled={!userData.use_chat}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box>
+      <CssBaseline />
       <TopMenu />
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'block' },
+          background: 'url(/assets/images/img-breadcrumb.png) top center',
+          backgroundAttachment: 'fixed',
+          backgroundSize: 'cover',
+          padding: '48px 0',
+          marginTop: { xs: '70px', sm: '70px', md: '70px' },
+        }}
+      >
+        <Typography variant="h5" color="white" textAlign="center">
+          CHAT GPT
+        </Typography>
+      </Box>
       <Container component="main" maxWidth="md">
-        <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 1,
             marginBottom: 8,
             display: 'flex',
             flexDirection: 'column',
@@ -233,9 +203,9 @@ export const Chat = () => {
             paddingTop: 4,
           }}
         >
-          {renderNoRows()}
           {renderLoading()}
-          {renderTable()}
+          {renderInformativo()}
+          {renderChat()}
         </Box>
       </Container>
       <Footer />

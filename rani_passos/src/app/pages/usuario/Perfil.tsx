@@ -15,14 +15,13 @@ import {
   Typography,
   Box,
   Button,
-  Avatar
+  Avatar,
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { Link } from 'react-router-dom';
 import { Footer, TopMenu } from '../../shared/components';
 import { redirect } from 'react-router-dom';
 import { useAuthContext } from '../../shared/contexts';
-
 
 export const Perfil = () => {
   const { isAuth } = useAuthContext();
@@ -31,7 +30,6 @@ export const Perfil = () => {
   const [userData, setUserData] = React.useState<IUserData>();
   const [isLoading, setIsLoading] = React.useState(true);
   const navigate = useNavigate();
-
 
   React.useEffect(() => {
     setIsLoading(true);
@@ -45,18 +43,31 @@ export const Perfil = () => {
     setIsLoading(false);
   }, []);
 
-  if(!isAuth) {
+  if (!isAuth) {
     return <Navigate to="/login" replace />;
   }
 
   return (
     <>
+      <CssBaseline />
       <TopMenu />
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'block' },
+          background: 'url(/assets/images/img-breadcrumb.png) top center',
+          backgroundAttachment: 'fixed',
+          backgroundSize: 'cover',
+          padding: '48px 0',
+          marginTop: { xs: '70px', sm: '70px', md: '70px' },
+        }}
+      >
+        <Typography variant="h5" color="white" textAlign="center">
+          MINHA CONTA
+        </Typography>
+      </Box>
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -64,25 +75,11 @@ export const Perfil = () => {
         >
           <Paper elevation={0} style={{ margin: '32px 0px' }}>
             <Card>
-              <CardHeader
-                // subheader="Estas informações podem ser editadas"
-                title={
-                  <Box style={{ display: 'flex', alignItems: 'center' }}>
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                      <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                      Minha Conta
-                    </Typography>
-                  </Box>
-                }
-              />
               <Divider />
               <CardContent>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     {userData?.name}
-
                   </Grid>
                   <Grid item xs={12}>
                     {userData?.cpf}
@@ -95,24 +92,13 @@ export const Perfil = () => {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Button component={Link} to="/esqueci" variant="contained" >
-                        Alterar Senha?
+                    <Button component={Link} to="/esqueci" variant="contained">
+                      Alterar Senha?
                     </Button>
                   </Grid>
                 </Grid>
               </CardContent>
               <Divider />
-              {/* <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  p: 2,
-                }}
-              >
-                <Button color="secondary" variant="contained" startIcon={<SaveIcon />}>
-                  Salvar
-                </Button>
-              </Box> */}
             </Card>
           </Paper>
         </Box>

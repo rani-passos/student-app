@@ -74,7 +74,7 @@ export const TopMenu = (props: any) => {
   const pages = [
     { name: 'Cursos', url: '/' },
     { name: 'Pedidos', url: '/pedidos' },
-    { name: 'Meus Dados', url: '/minha-conta' },
+    { name: 'ChatGPT', url: '/chat-gpt' },
   ];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -283,18 +283,17 @@ export const TopMenu = (props: any) => {
                   </Typography>
                 </Button>
               ))}
+            </Box>
+
+            <Box sx={{ flexGrow: 0 }}>
               <Button
                 variant="contained"
-                sx={{ paddingLeft: '16px', paddingRight: '16px' }}
+                sx={{ marginRight: 4 }}
                 href="https://www.ranipassos.com.br/courses/assinatura-completa"
               >
                 Seja Assinante
               </Button>
-            </Box>
-
-            {notificationsContent()}
-
-            <Box sx={{ flexGrow: 0 }}>
+              {notificationsContent()}
               <Tooltip title="Abrir Preferencias">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 2 }}>
                   <Avatar sx={{ bgcolor: 'purple' }} alt="Avatar">
@@ -318,14 +317,17 @@ export const TopMenu = (props: any) => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
+                <MenuItem onClick={() => navigate('/minha-conta')}>
+                  <Typography>Meus dados</Typography>
+                </MenuItem>
                 <MenuItem onClick={() => navigate('/')}>
                   <Typography>Cursos</Typography>
                 </MenuItem>
                 <MenuItem onClick={() => navigate('/pedidos')}>
                   <Typography>Pedidos</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => navigate('/minha-conta')}>
-                  <Typography>Meus dados</Typography>
+                <MenuItem onClick={() => navigate('/chat-gpt')}>
+                  <Typography>ChatGPT</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleSair}>
                   <Typography>Sair</Typography>
