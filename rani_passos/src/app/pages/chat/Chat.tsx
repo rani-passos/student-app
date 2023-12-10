@@ -163,7 +163,7 @@ export const Chat = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
           <TextField
             fullWidth
-            label="Mensagem ChatGPT..."
+            label="Mensagem ChatRAV..."
             value={newMessage}
             disabled={!userData.use_chat}
             onChange={(e) => setNewMessage(e.target.value)}
