@@ -118,7 +118,7 @@ export const Chat = () => {
         {!isLoading && !userData.use_chat ? (
           <Alert severity="warning" sx={{ marginBottom: 3, width: '100%' }}>
             <AlertTitle>Aguardem</AlertTitle>
-            Novidades virão por ai.{' '}
+            Em breve, teremos novidades empolgantes!{' '}
           </Alert>
         ) : null}
       </>
