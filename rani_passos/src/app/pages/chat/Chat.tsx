@@ -125,6 +125,17 @@ export const Chat = () => {
     );
   }
 
+  const ListItemTextWithHtml: React.FC<{ text: string }> = ({ text }) => {
+    const formattedText = text.split('\n').map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        <br />
+      </React.Fragment>
+    ));
+
+    return <ListItemText secondary={<div>{formattedText}</div>} />;
+  };
+
   function renderChat() {
     return (
       <Box sx={{ width: '100%', margin: '0 auto' }}>
@@ -149,7 +160,7 @@ export const Chat = () => {
               </ListItem>
 
               <ListItem>
-                <ListItemText secondary={message.answer} />
+                <ListItemTextWithHtml text={message.answer} />
               </ListItem>
             </React.Fragment>
           ))}

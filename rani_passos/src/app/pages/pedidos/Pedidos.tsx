@@ -59,8 +59,7 @@ export const Pedidos = () => {
           sx={{ width: '100%' }}
         />
       );
-    }
-    if (value === 'inactive') {
+    } else if (value === 'inactive') {
       return (
         <Chip
           label="INATIVO"
@@ -69,33 +68,39 @@ export const Pedidos = () => {
           sx={{ width: '100%' }}
         />
       );
-    }
-    if (value === 'paid') {
+    } else if (value === 'paid') {
       return (
         <Chip
           label="PAGO"
           color="success"
-          variant="outlined"
+          variant="filled"
           sx={{ width: '100%' }}
         />
       );
-    }
-    if (value === 'pending') {
+    } else if (value === 'pending') {
       return (
         <Chip
           label="PENDENTE"
           color="primary"
-          variant="outlined"
+          variant="filled"
           sx={{ width: '100%' }}
         />
       );
-    }
-    if (value === 'canceled') {
+    } else if (value === 'canceled') {
       return (
         <Chip
           label="CANCELADO"
           color="error"
-          variant="outlined"
+          variant="filled"
+          sx={{ width: '100%' }}
+        />
+      );
+    } else if (value === 'expired') {
+      return (
+        <Chip
+          label="VENCIDO"
+          color="warning"
+          variant="filled"
           sx={{ width: '100%' }}
         />
       );
