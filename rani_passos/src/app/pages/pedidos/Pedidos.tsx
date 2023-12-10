@@ -112,7 +112,7 @@ export const Pedidos = () => {
     } else if (value === 'billet') {
       return 'Boleto';
     } else if (value === 'bonus') {
-      return 'Bonûs';
+      return 'Bônus';
     } else {
       return '-';
     }
