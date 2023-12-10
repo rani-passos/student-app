@@ -25,6 +25,8 @@ import {
 import { useTheme } from '@mui/system';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { NotificationsService } from '../services/notifications/NotificationsService';
+
+import { TermsService } from '../services/terms/TermsService';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 
@@ -163,6 +165,18 @@ export const TopMenu = (props: any) => {
       }
     });
     setIsLoading(false);
+  }, []);
+
+  React.useEffect(() => {
+    TermsService.checkedUser().then((result: any) => {
+      if (result instanceof Error) {
+        setError(true);
+      } else {
+        if (!result.checked && location.pathname !== '/termos-uso') {
+          navigate('/termos-uso');
+        }
+      }
+    });
   }, []);
 
   return (
@@ -328,6 +342,9 @@ export const TopMenu = (props: any) => {
                 </MenuItem>
                 <MenuItem onClick={() => navigate('/chat-gpt')}>
                   <Typography>ChatGPT</Typography>
+                </MenuItem>
+                <MenuItem onClick={() => navigate('/termos-uso')}>
+                  <Typography>Termos de Uso</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleSair}>
                   <Typography>Sair</Typography>

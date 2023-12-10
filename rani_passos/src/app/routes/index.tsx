@@ -4,6 +4,7 @@ import Perfil from '../pages/usuario/Perfil';
 import Aula from '../pages/cursos/Aula';
 import { Pedidos } from '../pages';
 import { Chat } from '../pages';
+import { Termos } from '../pages';
 import { Painel } from '../pages';
 import {
   Esqueci,
@@ -21,6 +22,7 @@ export const Rotas = () => {
       <Route path="/pedidos" element={<Pedidos />} />
       <Route path="/chat-gpt" element={<Chat />} />
       <Route path="/curso/:id" element={<Aula />} />
+      <Route path="/termos-uso" element={<Termos />} />
       {/* Rotas Publicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/esqueci" element={<Esqueci />} />

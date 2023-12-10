@@ -55,7 +55,7 @@ export const Chat = () => {
 
     const data = { question: newMessage, answer: '' };
     setNewMessage('');
-    ChatsService.create(data).then((result) => {
+    ChatsService.create(data).then((result: any) => {
       setIsLoadingMessages(false);
       if (result instanceof Error) {
         console.error('Chats' + result.message);
@@ -77,7 +77,7 @@ export const Chat = () => {
   }
 
   React.useEffect(() => {
-    ChatsService.getAll().then((result) => {
+    ChatsService.getAll().then((result: any) => {
       setIsLoading(false);
       if (result instanceof Error) {
         console.error('Chats' + result.message);
