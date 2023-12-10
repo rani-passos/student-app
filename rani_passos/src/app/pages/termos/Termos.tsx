@@ -83,8 +83,8 @@ export const Termos = () => {
       !termCheckedUser && (
         <Alert severity="warning" sx={{ width: '100%' }}>
           <AlertTitle>Atenção</AlertTitle>
-          Para prosseguir e utilizar o sistema, por favor leia e aceite os
-          termos de uso.
+          Para prosseguir e utilizar o sistema, por favor, leia e ao final
+          aceite os termos de uso.
         </Alert>
       )
     );

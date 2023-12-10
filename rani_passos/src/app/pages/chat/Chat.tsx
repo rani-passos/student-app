@@ -189,7 +189,7 @@ export const Chat = () => {
         }}
       >
         <Typography variant="h5" color="white" textAlign="center">
-          CHAT GPT
+          Chat - RAV
         </Typography>
       </Box>
       <Container component="main" maxWidth="md">
