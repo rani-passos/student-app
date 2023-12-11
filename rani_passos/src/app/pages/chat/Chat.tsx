@@ -16,6 +16,14 @@ import {
   LinearProgress,
 } from '@mui/material';
 
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
+import SendIcon from '@mui/icons-material/Send';
+
 import { IChats, ChatsService } from '../../shared/services/chats/ChatsService';
 import { IUserData, UserService } from '../../shared/services/user/UserService';
 
@@ -191,7 +199,13 @@ export const Chat = () => {
             </Box>
           )}
         </List>
-        <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: 2,
+          }}
+        >
           <TextField
             fullWidth
             label="Vamos aprender juntos. Pergunte aqui! 📚"
@@ -199,7 +213,18 @@ export const Chat = () => {
             disabled={!userData.use_chat}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
+            sx={{ width: '93%' }}
           />
+
+          <IconButton
+            color="primary"
+            sx={{ p: '10px', marginLeft: 2 }}
+            size="large"
+            aria-label="directions"
+            onClick={() => handleSendMessage()}
+          >
+            <SendIcon />
+          </IconButton>
         </Box>
       </Box>
     );
