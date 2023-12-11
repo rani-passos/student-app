@@ -38,6 +38,7 @@ export const Chat = () => {
     use_chat: false,
   });
   const [newMessage, setNewMessage] = React.useState('');
+  const [lastMessage, setLastMessage] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
   const [isLoadingMessages, setIsLoadingMessages] = React.useState(false);
   const messagesEndRef = React.useRef<HTMLUListElement>(null);
@@ -51,6 +52,7 @@ export const Chat = () => {
 
   const handleSendMessage = () => {
     if (!newMessage) return;
+    setLastMessage(newMessage);
     setIsLoadingMessages(true);
 
     const data = { question: newMessage, answer: '' };
@@ -60,6 +62,7 @@ export const Chat = () => {
       if (result instanceof Error) {
         console.error('Chats' + result.message);
       } else {
+        setLastMessage('');
         setChatMessages(result);
       }
     });
@@ -126,10 +129,21 @@ export const Chat = () => {
   }
 
   const ListItemTextWithHtml: React.FC<{ text: string }> = ({ text }) => {
-    const formattedText = text.split('\n').map((line, index) => (
-      <React.Fragment key={index}>
-        {line}
-        <br />
+    const lines = text.split('\n');
+
+    const formattedText = lines.map((line, lineIndex) => (
+      <React.Fragment key={lineIndex}>
+        {line
+          .split(/(\*\*[^*]+\*\*)/)
+          .filter(Boolean)
+          .map((segment, segmentIndex) => {
+            if (segment.startsWith('**') && segment.endsWith('**')) {
+              return <b key={segmentIndex}>{segment.slice(2, -2)}</b>;
+            }
+            return <span key={segmentIndex}>{segment}</span>;
+          })}
+
+        {lineIndex < lines.length - 1 ? <br /> : null}
       </React.Fragment>
     ));
 
@@ -149,7 +163,7 @@ export const Chat = () => {
         >
           {chatMessages.length == 0 && (
             <ListItem>
-              <ListItemText secondary="Como posso ajudá-lo hoje?" />
+              <ListItemText secondary="Fala, lindo(a). Como posso te ajudar?" />
             </ListItem>
           )}
 
@@ -165,6 +179,12 @@ export const Chat = () => {
             </React.Fragment>
           ))}
 
+          {lastMessage && (
+            <ListItem>
+              <ListItemText primary={lastMessage} />
+            </ListItem>
+          )}
+
           {isLoadingMessages && (
             <Box sx={{ width: '100%', padding: 2 }}>
               <LinearProgress />
@@ -174,7 +194,7 @@ export const Chat = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
           <TextField
             fullWidth
-            label="Mensagem ChatRAV..."
+            label="Vamos aprender juntos. Pergunte aqui! 📚"
             value={newMessage}
             disabled={!userData.use_chat}
             onChange={(e) => setNewMessage(e.target.value)}
