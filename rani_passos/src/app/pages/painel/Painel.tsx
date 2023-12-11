@@ -43,12 +43,11 @@ export const Painel = () => {
       <TopMenu />
       <Box
         sx={{
-          display: { xs: 'none', md: 'block' },
           background: 'url(/assets/images/img-breadcrumb.png) top center',
           backgroundAttachment: 'fixed',
           backgroundSize: 'cover',
-          padding: '48px 0',
-          marginTop: { xs: '70px', sm: '70px', md: '70px' },
+          padding: { xs: '25px 0', sm: '48px 0', md: '48px 0' },
+          marginTop: '70px',
         }}
       >
         <Typography variant="h5" color="white" textAlign="center">

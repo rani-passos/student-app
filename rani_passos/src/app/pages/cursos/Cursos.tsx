@@ -88,7 +88,13 @@ export const Cursos: React.FC = () => {
     return (
       coursesList.length > 0 &&
       coursesList.map((curso) => (
-        <Grid item xs={12} md={6} lg={4} key={curso.id}>
+        <Grid
+          sx={{ marginTop: 2, padding: 1 }}
+          xs={12}
+          md={6}
+          lg={4}
+          key={curso.id}
+        >
           <Card>
             <CardActionArea onClick={() => navigate(`/curso/${curso.id}`)}>
               <CardMedia
@@ -152,7 +158,7 @@ export const Cursos: React.FC = () => {
         sx={{
           flexGrow: 1,
           display: 'flex',
-          marginTop: { xs: '100px', sm: '100px', md: '36px' },
+          marginTop: { xs: '50px', sm: '50px', md: '36px' },
           justifyContent: 'center',
         }}
       >

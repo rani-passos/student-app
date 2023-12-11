@@ -53,7 +53,6 @@ export const Perfil = () => {
       <TopMenu />
       <Box
         sx={{
-          display: { xs: 'none', md: 'block' },
           background: 'url(/assets/images/img-breadcrumb.png) top center',
           backgroundAttachment: 'fixed',
           backgroundSize: 'cover',

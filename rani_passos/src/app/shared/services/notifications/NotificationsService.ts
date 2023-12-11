@@ -4,6 +4,7 @@ export interface INotifications {
   id: number;
   content: string;
   course: string;
+  direction: string;
 }
 
 const getAll = async (): Promise<INotifications[] | Error> => {
@@ -18,10 +19,12 @@ const getAll = async (): Promise<INotifications[] | Error> => {
   }
 };
 const getViewed = async (
-  notification_id: number
+  notification: INotifications
 ): Promise<INotifications | Error> => {
   try {
-    const { data } = await Api.get(`/notifications/${notification_id}/viewed`);
+    const { data } = await Api.get(
+      `/notifications/${notification.id}/viewed/${notification.direction}`
+    );
     return data;
   } catch (error) {
     console.log(error);
