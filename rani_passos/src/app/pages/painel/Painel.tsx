@@ -9,7 +9,7 @@ const pages = [
   { name: 'Cursos', url: '/' },
   { name: 'Pedidos', url: '/pedidos' },
   { name: 'Meus Dados', url: '/minha-conta' },
-  { name: 'ChatGPT', url: '/chat-gpt' },
+  { name: 'ChatRAV', url: '/chat-rav' },
 ];
 
 export const Painel = () => {

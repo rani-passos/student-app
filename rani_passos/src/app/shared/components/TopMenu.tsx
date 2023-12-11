@@ -76,7 +76,7 @@ export const TopMenu = (props: any) => {
   const pages = [
     { name: 'Cursos', url: '/' },
     { name: 'Pedidos', url: '/pedidos' },
-    { name: 'Chat-RAV', url: '/chat-gpt' },
+    { name: 'Chat-RAV', url: '/chat-rav' },
   ];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -340,7 +340,7 @@ export const TopMenu = (props: any) => {
                 <MenuItem onClick={() => navigate('/pedidos')}>
                   <Typography>Pedidos</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => navigate('/chat-gpt')}>
+                <MenuItem onClick={() => navigate('/chat-rav')}>
                   <Typography>Chat-RAV</Typography>
                 </MenuItem>
                 <MenuItem onClick={() => navigate('/termos-uso')}>
