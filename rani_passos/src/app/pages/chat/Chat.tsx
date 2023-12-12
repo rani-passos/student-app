@@ -14,6 +14,14 @@ import {
   Alert,
   AlertTitle,
   LinearProgress,
+  Link,
+  Button,
+  Avatar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
 } from '@mui/material';
 
 import Paper from '@mui/material/Paper';
@@ -24,28 +32,19 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import SendIcon from '@mui/icons-material/Send';
 
+import logo from 'rani_passos/public/assets/images/logo.svg';
+
 import { IChats, ChatsService } from '../../shared/services/chats/ChatsService';
-import { IUserData, UserService } from '../../shared/services/user/UserService';
+import { CoursesService } from '../../shared/services/courses/CoursesService';
 
 export const Chat = () => {
   const { isAuth } = useAuthContext();
 
   const [chatMessages, setChatMessages] = React.useState<IChats[]>([]);
-  const [userData, setUserData] = React.useState<IUserData>({
-    id: 0,
-    company_id: 0,
-    name: '',
-    birth_date: null,
-    cpf: '',
-    phone: '',
-    status: '',
-    email: '',
-    created_at: '',
-    updated_at: '',
-    authentication_token: '',
-    use_chat: false,
-  });
+  const [accessChatRav, setAccessChatRav] = React.useState(false);
   const [newMessage, setNewMessage] = React.useState('');
+  const [dailyQuota, setDailyQuota] = React.useState(0);
+  const [openDialog, setOpenDialog] = React.useState(false);
   const [lastMessage, setLastMessage] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
   const [isLoadingMessages, setIsLoadingMessages] = React.useState(false);
@@ -88,6 +87,17 @@ export const Chat = () => {
   }
 
   React.useEffect(() => {
+    ChatsService.dailyQuota().then((result: any) => {
+      setIsLoading(false);
+      if (result instanceof Error) {
+        console.error('Daily Quota' + result.message);
+      } else {
+        setDailyQuota(result.quota);
+      }
+    });
+  }, [chatMessages]);
+
+  React.useEffect(() => {
     ChatsService.getAll().then((result: any) => {
       setIsLoading(false);
       if (result instanceof Error) {
@@ -100,11 +110,11 @@ export const Chat = () => {
 
   React.useEffect(() => {
     setIsLoading(true);
-    UserService.getAll().then((result: IUserData) => {
+    CoursesService.accessChatRav().then((result: any) => {
       if (result instanceof Error) {
         console.error('User' + result.message);
       } else {
-        setUserData(result);
+        setAccessChatRav(result.access_course);
       }
     });
   }, []);
@@ -123,17 +133,132 @@ export const Chat = () => {
     );
   }
 
-  function renderInformativo() {
+  function renderDailyQuota() {
     return (
       <>
-        {!isLoading && !userData.use_chat ? (
+        {!isLoading && dailyQuota > 0 ? (
           <Alert severity="warning" sx={{ marginBottom: 3, width: '100%' }}>
-            <AlertTitle>Aguardem</AlertTitle>
-            Em breve, teremos novidades empolgantes!{' '}
+            <AlertTitle>Quota do Dia: {dailyQuota} mensagem</AlertTitle>
           </Alert>
         ) : null}
       </>
     );
+  }
+
+  function renderAction() {
+    return (
+      <>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '15px',
+          }}
+        >
+          <Link
+            href={'https://ranipassos.com.br'}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button sx={{ margin: '16px 0px' }} variant="text">
+              Como Usar?
+            </Button>
+          </Link>
+          <Button
+            sx={{ margin: '16px 0px' }}
+            variant="text"
+            onClick={() => setOpenDialog(true)}
+          >
+            Informações Importantes
+          </Button>
+        </Box>
+        <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+          <DialogTitle id="alert-dialog-title">
+            Informações Importantes
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <ul>
+                <li>
+                  Alunos não assinantes do Chat-RAV, ou que possuem algum curso
+                  com acesso ao Chat-RAV de forma gratuita, terão cortesia de
+                  apenas uma pergunta por dia, não acumulável pelos dias não
+                  utilizados.
+                </li>
+                <li>
+                  Alunos assinantes do Chat-RAV, ou que possuem algum curso pago
+                  com acesso ao Chat-RAV, terão direito a 20 perguntas por dia,
+                  não acumulável pelos dias não utilizado.
+                </li>
+                <li>
+                  o RAV é um assistente de Inteligência artificial e não é um
+                  modelo funcional para atividades alheias a assuntos de
+                  informática e tecnologia da informação.
+                </li>
+                <li>
+                  Esse assistente é constantemente atualizado e melhorado
+                  conforme evolução na tecnologia de inteligência artificial no
+                  Brasil e no mundo.
+                </li>
+                <li>
+                  Não nos responsabilizamos pelo uso indevido da ferramenta, por
+                  exemplo, para utilização visando resultados obscenos, cunho
+                  sexual, ilegal, religioso, ou qualquer outro fim diferente do
+                  proposto para estudo de informática e tecnologia da
+                  Informação.
+                </li>
+                <li>
+                  A tecnologia RAV não é um assistente de analise de edital,
+                  consultor de estudos ou guia para outros temas diferentes de
+                  informática.
+                </li>
+              </ul>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenDialog(false)} autoFocus>
+              Fechar
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
+    );
+  }
+
+  function renderInformativo() {
+    if (isLoading) return;
+
+    if (dailyQuota == 0 && accessChatRav) {
+      return (
+        <Alert severity="warning" sx={{ marginBottom: 3, width: '100%' }}>
+          <AlertTitle>Atenção</AlertTitle>
+          Você atingiu o limite de mensagens do dia! <br />
+          Para mais informações consulte as regras abaixo ou os termos de uso e
+          aquisição.
+        </Alert>
+      );
+    } else if (dailyQuota == 0 && !accessChatRav) {
+      return (
+        <Alert severity="warning" sx={{ marginBottom: 3, width: '100%' }}>
+          <AlertTitle>Atenção</AlertTitle>
+          Você atingiu o limite de mensagens do dia! <br /> Ter dúvidas é parte
+          do seu caminho para o sucesso. Ao assinar nossa ferramenta exclusiva
+          no Brasil, você amplia seu aprendizado e se destaca na concorrência.{' '}
+          <br />
+          Seja um assinante e conquiste a aprovação no concurso dos seus sonhos!
+          <br />
+          <Link
+            href={'https://ranipassos.com.br/'}
+            target="_blank"
+            color="inherit"
+            rel="noopener noreferrer"
+            sx={{ fontWeight: '800' }}
+          >
+            Saiba Mais
+          </Link>
+        </Alert>
+      );
+    }
   }
 
   const ListItemTextWithHtml: React.FC<{ text: string }> = ({ text }) => {
@@ -155,7 +280,29 @@ export const Chat = () => {
       </React.Fragment>
     ));
 
-    return <ListItemText secondary={<div>{formattedText}</div>} />;
+    return (
+      <ListItemText
+        secondary={
+          <Box sx={{ display: 'flex' }}>
+            <Avatar alt="Chat RAV" src={logo} />
+            <Box sx={{ marginLeft: '10px' }}>{formattedText}</Box>
+          </Box>
+        }
+      />
+    );
+  };
+
+  const ListItemTextQuestion: React.FC<{ text: string }> = ({ text }) => {
+    return (
+      <ListItemText
+        primary={
+          <Box sx={{ display: 'flex' }}>
+            <Avatar alt="Aluno" src="/static/images/avatar/1.jpg" />
+            <Box sx={{ marginLeft: '10px', paddingTop: '10px' }}>{text}</Box>
+          </Box>
+        }
+      />
+    );
   };
 
   function renderChat() {
@@ -178,7 +325,7 @@ export const Chat = () => {
           {chatMessages.map((message, index) => (
             <React.Fragment key={index}>
               <ListItem>
-                <ListItemText primary={message.question} />
+                <ListItemTextQuestion text={message.question} />
               </ListItem>
 
               <ListItem>
@@ -189,7 +336,7 @@ export const Chat = () => {
 
           {lastMessage && (
             <ListItem>
-              <ListItemText primary={lastMessage} />
+              <ListItemTextQuestion text={lastMessage} />
             </ListItem>
           )}
 
@@ -210,7 +357,7 @@ export const Chat = () => {
             fullWidth
             label="Vamos aprender juntos. Pergunte aqui! 📚"
             value={newMessage}
-            disabled={!userData.use_chat}
+            disabled={dailyQuota == 0 || isLoadingMessages}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             sx={{ width: '93%' }}
@@ -248,19 +395,12 @@ export const Chat = () => {
         </Typography>
       </Box>
       <Container component="main" maxWidth="md">
-        <Box
-          sx={{
-            marginTop: 1,
-            marginBottom: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            paddingTop: 4,
-          }}
-        >
+        <Box sx={{ marginTop: 1, marginBottom: 8, paddingTop: 4 }}>
           {renderLoading()}
+          {renderDailyQuota()}
           {renderInformativo()}
           {renderChat()}
+          {renderAction()}
         </Box>
       </Container>
       <Footer />

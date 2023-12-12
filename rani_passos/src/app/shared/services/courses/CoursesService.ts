@@ -49,6 +49,17 @@ const getModulesById = async (id: number): Promise<any> => {
   }
 };
 
+const accessChatRav = async (): Promise<any | Error> => {
+  try {
+    const { data } = await Api.get('courses/access_chat_rav');
+    return data;
+  } catch (error) {
+    return new Error(
+      (error as { message: string }).message || 'Erro ao listar registros.'
+    );
+  }
+};
+
 const getLessonsById = async (
   course_id: number,
   module_id: number,
@@ -110,4 +121,5 @@ export const CoursesService = {
   getLessonsById,
   getAttended,
   getNotAttended,
+  accessChatRav,
 };

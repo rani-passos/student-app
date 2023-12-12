@@ -1,11 +1,14 @@
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import { Divider } from '@mui/material';
 import logo from 'rani_passos/public/assets/images/logo.svg';
 
 export const Footer = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Divider />
@@ -30,8 +33,8 @@ export const Footer = () => {
                   mb: 2,
                 }}
               />
-              <Typography variant="body2">
-                Rani Passos | Todos os direitos reservados
+              <Typography variant="body2" onClick={() => navigate('/chat-rav')}>
+                Rani Passos | Todos os direitos reservados | Chat
               </Typography>
             </Box>
             <Box component="div" sx={{ margin: '0px 32px' }}>

@@ -52,7 +52,7 @@ try {
 export const TopMenu = (props: any) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
-  const [openDialog, setOpenDialog] = React.useState(false);
+
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -75,16 +75,8 @@ export const TopMenu = (props: any) => {
   const pages = [
     { name: 'Cursos', url: '/' },
     { name: 'Pedidos', url: '/pedidos' },
-    { name: 'Chat-RAV', url: '/chat-rav' },
+    { name: 'Meus dados', url: '/minha-conta' },
   ];
-
-  const handleClickOpenDialog = () => {
-    setOpenDialog(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
 
   const handleSair = () => {
     logout();
@@ -255,209 +247,166 @@ export const TopMenu = (props: any) => {
   }
 
   return (
-    <>
-      <AppBar
-        position="fixed"
-        sx={{
-          backgroundColor: 'background.paper',
-          color: '#000',
-          boxShadow: 'none',
-          borderBottom: '1px solid #ddd',
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-        }}
-      >
-        <Container maxWidth={props.largura || 'lg'}>
-          <Toolbar disableGutters>
-            <Box
-              component="img"
-              src={logo}
-              sx={{
-                height: 'auto',
-                width: 200,
-                display: { xs: 'none', md: 'flex' },
-                color: 'inherit',
-              }}
-            />
+    <AppBar
+      position="fixed"
+      sx={{
+        backgroundColor: 'background.paper',
+        color: '#000',
+        boxShadow: 'none',
+        borderBottom: '1px solid #ddd',
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+      }}
+    >
+      <Container maxWidth={props.largura || 'lg'}>
+        <Toolbar disableGutters>
+          <Box
+            component="img"
+            src={logo}
+            sx={{
+              height: 'auto',
+              width: 200,
+              display: { xs: 'none', md: 'flex' },
+              color: 'inherit',
+            }}
+          />
 
-            {props.drawer && mdDown ? (
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  display: { xs: 'flex', md: 'none' },
-                }}
-              >
-                <Button
-                  variant="text"
-                  startIcon={<MenuIcon />}
-                  onClick={toggleDrawerOpen}
-                >
-                  Aulas
-                </Button>
-              </Box>
-            ) : (
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  display: { xs: 'flex', md: 'none' },
-                }}
-              >
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleOpenNavMenu}
-                  color="primary"
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                  sx={{
-                    display: { xs: 'block', md: 'none' },
-                  }}
-                >
-                  {pages.map((page) => (
-                    <MenuItem
-                      key={page.url}
-                      onClick={() => handleNavMenu(page.url)}
-                    >
-                      <Typography textAlign="center" color="secondary">
-                        {' '}
-                        {page.name}{' '}
-                      </Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
-            )}
+          {props.drawer && mdDown ? (
             <Box
               sx={{
                 flexGrow: 1,
-                display: { xs: 'none', md: 'flex' },
-                justifyContent: 'center',
+                display: { xs: 'flex', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <Button
-                  key={page.url}
-                  color={
-                    location.pathname === page.url ? 'primary' : 'secondary'
-                  }
-                  onClick={() => handleNavMenu(page.url)}
-                  sx={{ margin: '4px 16px' }}
-                >
-                  <Typography
-                    textAlign="center"
-                    variant="button"
-                    style={{
-                      fontWeight:
-                        location.pathname === page.url ? '600' : '400',
-                      fontSize: '1rem',
-                    }}
-                  >
-                    {page.name}
-                  </Typography>
-                </Button>
-              ))}
-            </Box>
-
-            <Box sx={{ flexGrow: 0 }}>
               <Button
-                variant="contained"
-                sx={{ marginRight: 4 }}
-                href="https://www.ranipassos.com.br/courses/assinatura-completa"
+                variant="text"
+                startIcon={<MenuIcon />}
+                onClick={toggleDrawerOpen}
               >
-                Seja Assinante
+                Aulas
               </Button>
-              {notificationsContent()}
-              <Tooltip title="Abrir Preferencias">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 2 }}>
-                  <Avatar sx={{ bgcolor: 'purple' }} alt="Avatar">
-                    {userName}
-                  </Avatar>
-                </IconButton>
-              </Tooltip>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: 'flex', md: 'none' },
+              }}
+            >
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="primary"
+              >
+                <MenuIcon />
+              </IconButton>
               <Menu
-                sx={{ mt: '45px' }}
                 id="menu-appbar"
-                anchorEl={anchorElUser}
+                anchorEl={anchorElNav}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
+                  vertical: 'bottom',
+                  horizontal: 'left',
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'left',
                 }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                }}
               >
-                <MenuItem onClick={() => navigate('/minha-conta')}>
-                  <Typography>Meus dados</Typography>
-                </MenuItem>
-                <MenuItem onClick={() => navigate('/')}>
-                  <Typography>Cursos</Typography>
-                </MenuItem>
-                <MenuItem onClick={() => navigate('/pedidos')}>
-                  <Typography>Pedidos</Typography>
-                </MenuItem>
-                <MenuItem onClick={() => navigate('/chat-rav')}>
-                  <Typography>Chat-RAV</Typography>
-                </MenuItem>
-                <MenuItem onClick={() => navigate('/termos-uso')}>
-                  <Typography>Termos de Uso</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleSair}>
-                  <Typography>Sair</Typography>
-                </MenuItem>
+                {pages.map((page) => (
+                  <MenuItem
+                    key={page.url}
+                    onClick={() => handleNavMenu(page.url)}
+                  >
+                    <Typography textAlign="center" color="secondary">
+                      {' '}
+                      {page.name}{' '}
+                    </Typography>
+                  </MenuItem>
+                ))}
               </Menu>
             </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle id="alert-dialog-title">Notificações</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {notifications.map((notification) => (
-              <div key={notification.id}>
-                <Tooltip title="Marcar como lida">
-                  <IconButton
-                    onClick={() => {
-                      notificationViewed(notification.id);
-                    }}
-                  >
-                    <NotificationsOffIcon />
-                  </IconButton>
-                </Tooltip>
-                {` ${notification.course}: ${notification.content} `}
-              </div>
+          )}
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'none', md: 'flex' },
+              justifyContent: 'center',
+            }}
+          >
+            {pages.map((page) => (
+              <Button
+                key={page.url}
+                color={location.pathname === page.url ? 'primary' : 'secondary'}
+                onClick={() => handleNavMenu(page.url)}
+                sx={{ margin: '4px 16px' }}
+              >
+                <Typography
+                  textAlign="center"
+                  variant="button"
+                  style={{
+                    fontWeight: location.pathname === page.url ? '600' : '400',
+                    fontSize: '1rem',
+                  }}
+                >
+                  {page.name}
+                </Typography>
+              </Button>
             ))}
-            {notifications.length <= 0
-              ? 'Não há novas mensagens por enquanto!'
-              : ''}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} autoFocus>
-            Fechar
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Button
+              variant="contained"
+              sx={{ marginRight: 4 }}
+              href="https://www.ranipassos.com.br/courses/assinatura-completa"
+            >
+              Seja Assinante
+            </Button>
+            {notificationsContent()}
+            <Tooltip title="Abrir Preferencias">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 2 }}>
+                <Avatar sx={{ bgcolor: 'purple' }} alt="Avatar">
+                  {userName}
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={() => navigate('/minha-conta')}>
+                <Typography>Meus dados</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/termos-uso')}>
+                <Typography>Termos de Uso</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleSair}>
+                <Typography>Sair</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
