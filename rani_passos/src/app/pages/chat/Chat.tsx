@@ -65,10 +65,11 @@ export const Chat = () => {
     const data = { question: newMessage, answer: '' };
     setNewMessage('');
     ChatsService.create(data).then((result: any) => {
-      setIsLoadingMessages(false);
       if (result instanceof Error) {
+        chatsGetAll();
         console.error('Chats' + result.message);
       } else {
+        setIsLoadingMessages(false);
         setLastMessage('');
         setChatMessages(result);
       }
@@ -86,6 +87,18 @@ export const Chat = () => {
     return <Navigate to="/login" replace />;
   }
 
+  function chatsGetAll() {
+    ChatsService.getAll().then((result: any) => {
+      setIsLoading(false);
+      if (result instanceof Error) {
+        console.error('Chats' + result.message);
+      } else {
+        setIsLoadingMessages(false);
+        setChatMessages(result);
+      }
+    });
+  }
+
   React.useEffect(() => {
     ChatsService.dailyQuota().then((result: any) => {
       setIsLoading(false);
@@ -98,14 +111,7 @@ export const Chat = () => {
   }, [chatMessages]);
 
   React.useEffect(() => {
-    ChatsService.getAll().then((result: any) => {
-      setIsLoading(false);
-      if (result instanceof Error) {
-        console.error('Chats' + result.message);
-      } else {
-        setChatMessages(result);
-      }
-    });
+    chatsGetAll();
   }, []);
 
   React.useEffect(() => {
