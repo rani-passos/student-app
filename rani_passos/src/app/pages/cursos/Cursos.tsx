@@ -137,7 +137,6 @@ export const Cursos: React.FC = () => {
     debounce(() => {
       CoursesService.getAll(page, searchTerm).then((result) => {
         setIsLoading(false);
-        console.log('isLoadingCoursesService', isLoading);
 
         if (result instanceof Error) {
           setError(true);

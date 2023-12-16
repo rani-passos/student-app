@@ -1,6 +1,7 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
+import { Environment } from '../../shared/environment';
 import { Footer, TopMenu } from '../../shared/components';
 import { Navigate } from 'react-router-dom';
 import { useAuthContext } from '../../shared/contexts';
@@ -24,18 +25,15 @@ import {
   DialogContentText,
 } from '@mui/material';
 
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import SendIcon from '@mui/icons-material/Send';
 
 import logo from 'rani_passos/public/assets/images/logo.svg';
 
 import { IChats, ChatsService } from '../../shared/services/chats/ChatsService';
 import { CoursesService } from '../../shared/services/courses/CoursesService';
+
+const ws = new WebSocket(`wss://${Environment.WS}/cable`);
 
 export const Chat = () => {
   const { isAuth } = useAuthContext();
@@ -49,6 +47,39 @@ export const Chat = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [isLoadingMessages, setIsLoadingMessages] = React.useState(false);
   const messagesEndRef = React.useRef<HTMLUListElement>(null);
+
+  const userId = () => {
+    const userData = sessionStorage.getItem('USER_DATA');
+    if (userData) return JSON.parse(userData).id;
+
+    return null;
+  };
+
+  ws.onopen = () => {
+    console.log('Conectado ao servidor websoket');
+
+    ws.send(
+      JSON.stringify({
+        command: 'subscribe',
+        identifier: JSON.stringify({
+          channel: 'ChatChannel',
+        }),
+      })
+    );
+  };
+
+  ws.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    if (data.type === 'ping') return;
+    if (data.type === 'welcome') return;
+    if (data.type === 'confirm_subscription') return;
+
+    if (data.message.id == userId()) {
+      setIsLoadingMessages(false);
+      setLastMessage('');
+      setChatMessages(data.message.messages);
+    }
+  };
 
   const scrollToBottom = () => {
     const messagesContainer = messagesEndRef.current;
@@ -66,12 +97,7 @@ export const Chat = () => {
     setNewMessage('');
     ChatsService.create(data).then((result: any) => {
       if (result instanceof Error) {
-        chatsGetAll();
         console.error('Chats' + result.message);
-      } else {
-        setIsLoadingMessages(false);
-        setLastMessage('');
-        setChatMessages(result);
       }
     });
   };

@@ -44,7 +44,6 @@ let user: any = '';
 
 try {
   user = sessionStorage.getItem('USER_CHAR')?.replace(/['"]+/g, '');
-  console.log('user:', user);
 } catch (error) {
   console.error(error);
 }

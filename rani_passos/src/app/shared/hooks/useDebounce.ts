@@ -9,7 +9,6 @@ export const useDebounce = () => {
     }
     debouncing.current = setTimeout(() => {
       func();
-      console.log('debounce');
     }, 500);
   }, []);
   return { debounce };
