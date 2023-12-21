@@ -55,31 +55,43 @@ export const Chat = () => {
     return null;
   };
 
-  ws.onopen = () => {
-    console.log('Conectado ao servidor websoket');
+  function connectWebSocket() {
+    ws.onopen = () => {
+      console.log('Conectado ao servidor websoket');
 
-    ws.send(
-      JSON.stringify({
-        command: 'subscribe',
-        identifier: JSON.stringify({
-          channel: 'ChatChannel',
-        }),
-      })
-    );
-  };
+      ws.send(
+        JSON.stringify({
+          command: 'subscribe',
+          identifier: JSON.stringify({
+            channel: 'ChatChannel',
+          }),
+        })
+      );
+    };
 
-  ws.onmessage = (e) => {
-    const data = JSON.parse(e.data);
-    if (data.type === 'ping') return;
-    if (data.type === 'welcome') return;
-    if (data.type === 'confirm_subscription') return;
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.type === 'ping') return;
+      if (data.type === 'welcome') return;
+      if (data.type === 'confirm_subscription') return;
 
-    if (data.message.id == userId()) {
-      setIsLoadingMessages(false);
-      setLastMessage('');
-      setChatMessages(data.message.messages);
-    }
-  };
+      if (data.message.id == userId()) {
+        setIsLoadingMessages(false);
+        setLastMessage('');
+        setChatMessages(data.message.messages);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('Erro na conexão WebSocket:', error);
+      // Trate aqui qualquer ação adicional em caso de erro
+    };
+
+    ws.onclose = () => {
+      console.log('Conexão WebSocket fechada. Tentando reconectar...');
+      setTimeout(connectWebSocket, 3000); // Tenta reconectar após 3 segundos
+    };
+  }
 
   const scrollToBottom = () => {
     const messagesContainer = messagesEndRef.current;
@@ -93,6 +105,13 @@ export const Chat = () => {
     setLastMessage(newMessage);
     setIsLoadingMessages(true);
 
+    if (ws.readyState === WebSocket.OPEN) {
+      console.log('WebSocket está conectado');
+    } else {
+      console.log('WebSocket não está conectado');
+      connectWebSocket();
+    }
+
     const data = { question: newMessage, answer: '' };
     setNewMessage('');
     ChatsService.create(data).then((result: any) => {
@@ -102,12 +121,12 @@ export const Chat = () => {
     });
   };
 
-  const handleKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      handleSendMessage();
-    }
-  };
+  // const handleKeyDown = (event: any) => {
+  //   if (event.key === 'Enter') {
+  //     event.preventDefault();
+  //     handleSendMessage();
+  //   }
+  // };
 
   if (!isAuth) {
     return <Navigate to="/login" replace />;
@@ -125,6 +144,17 @@ export const Chat = () => {
     });
   }
 
+  function rowsTextField() {
+    const lines = newMessage.split('\n');
+    const countEnterLines = lines.length;
+    const countLines = Math.floor(newMessage.length / 103);
+    const totalCount = countEnterLines + countLines;
+
+    if (totalCount >= 6) return 6;
+
+    return totalCount;
+  }
+
   React.useEffect(() => {
     ChatsService.dailyQuota().then((result: any) => {
       setIsLoading(false);
@@ -138,6 +168,39 @@ export const Chat = () => {
 
   React.useEffect(() => {
     chatsGetAll();
+  }, []);
+
+  React.useEffect(() => {
+    ws.onopen = () => {
+      console.log('Conectado ao servidor websoket');
+
+      ws.send(
+        JSON.stringify({
+          command: 'subscribe',
+          identifier: JSON.stringify({
+            channel: 'ChatChannel',
+          }),
+        })
+      );
+    };
+
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.type === 'ping') return;
+      if (data.type === 'welcome') return;
+      if (data.type === 'confirm_subscription') return;
+
+      if (data.message.id == userId()) {
+        setIsLoadingMessages(false);
+        setLastMessage('');
+        setChatMessages(data.message.messages);
+      }
+    };
+
+    // Limpeza
+    // return () => {
+    //   ws.close();
+    // };
   }, []);
 
   React.useEffect(() => {
@@ -192,13 +255,18 @@ export const Chat = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button sx={{ margin: '16px 0px' }} variant="text">
+            <Button
+              color="info"
+              sx={{ margin: '16px 0px' }}
+              variant="contained"
+            >
               Como Usar?
             </Button>
           </Link>
           <Button
             sx={{ margin: '16px 0px' }}
-            variant="text"
+            variant="contained"
+            color="info"
             onClick={() => setOpenDialog(true)}
           >
             Informações Importantes
@@ -293,7 +361,10 @@ export const Chat = () => {
     }
   }
 
-  const ListItemTextWithHtml: React.FC<{ text: string }> = ({ text }) => {
+  const ListItemTextWithHtml: React.FC<{
+    text: string;
+    question?: boolean;
+  }> = ({ text, question }) => {
     const lines = text.split('\n');
 
     const formattedText = lines.map((line, lineIndex) => (
@@ -313,14 +384,29 @@ export const Chat = () => {
     ));
 
     return (
-      <ListItemText
-        secondary={
-          <Box sx={{ display: 'flex' }}>
-            <Avatar alt="Chat RAV" src={logo} />
-            <Box sx={{ marginLeft: '10px' }}>{formattedText}</Box>
-          </Box>
-        }
-      />
+      <>
+        {question ? (
+          <ListItemText
+            primary={
+              <Box sx={{ display: 'flex' }}>
+                <Avatar alt="Aluno" src="/static/images/avatar/1.jpg" />
+                <Box sx={{ marginLeft: '10px', paddingTop: '10px' }}>
+                  {formattedText}
+                </Box>
+              </Box>
+            }
+          />
+        ) : (
+          <ListItemText
+            secondary={
+              <Box sx={{ display: 'flex' }}>
+                <Avatar alt="Chat RAV" src={logo} />
+                <Box sx={{ marginLeft: '10px' }}>{formattedText}</Box>
+              </Box>
+            }
+          />
+        )}
+      </>
     );
   };
 
@@ -342,7 +428,7 @@ export const Chat = () => {
       <Box sx={{ width: '100%', margin: '0 auto' }}>
         <List
           sx={{
-            height: 300,
+            height: 380,
             overflow: 'auto',
             bgcolor: 'background.paper',
           }}
@@ -357,7 +443,7 @@ export const Chat = () => {
           {chatMessages.map((message, index) => (
             <React.Fragment key={index}>
               <ListItem>
-                <ListItemTextQuestion text={message.question} />
+                <ListItemTextWithHtml text={message.question} question />
               </ListItem>
 
               <ListItem>
@@ -368,7 +454,7 @@ export const Chat = () => {
 
           {lastMessage && (
             <ListItem>
-              <ListItemTextQuestion text={lastMessage} />
+              <ListItemTextWithHtml text={lastMessage} question />
             </ListItem>
           )}
 
@@ -381,22 +467,26 @@ export const Chat = () => {
         <Box
           sx={{
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'end',
             marginTop: 2,
           }}
         >
           <TextField
             fullWidth
+            multiline
+            rows={rowsTextField()}
             label="Vamos aprender juntos. Pergunte aqui! 📚"
             value={newMessage}
             disabled={dailyQuota == 0 || isLoadingMessages}
             onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={handleKeyDown}
-            sx={{ width: '93%' }}
+            sx={{
+              width: '93%',
+              background: '#fff',
+            }}
           />
 
           <IconButton
-            color="primary"
+            color="info"
             sx={{ p: '10px', marginLeft: 2 }}
             size="large"
             aria-label="directions"
@@ -415,26 +505,31 @@ export const Chat = () => {
       <TopMenu />
       <Box
         sx={{
-          background: 'url(/assets/images/img-breadcrumb.png) top center',
-          backgroundAttachment: 'fixed',
+          background: 'url(/assets/images/chat/RAV-I.png) top center',
           backgroundSize: 'cover',
-          padding: '48px 0',
+          padding: '60px 0',
           marginTop: { xs: '70px', sm: '70px', md: '70px' },
+          borderBottom: '2px solid #fff',
+        }}
+      ></Box>
+
+      <Box
+        sx={{
+          background: 'url(/assets/images/chat/RAV-I-Fundo.png) top center',
+          backgroundSize: 'cover',
         }}
       >
-        <Typography variant="h5" color="white" textAlign="center">
-          Chat - RAV
-        </Typography>
+        <Container component="main" maxWidth="md">
+          <Box sx={{ marginBottom: 8, paddingTop: 4 }}>
+            {renderLoading()}
+            {renderDailyQuota()}
+            {renderInformativo()}
+            {renderChat()}
+            {renderAction()}
+          </Box>
+        </Container>
       </Box>
-      <Container component="main" maxWidth="md">
-        <Box sx={{ marginTop: 1, marginBottom: 8, paddingTop: 4 }}>
-          {renderLoading()}
-          {renderDailyQuota()}
-          {renderInformativo()}
-          {renderChat()}
-          {renderAction()}
-        </Box>
-      </Container>
+
       <Footer />
     </Box>
   );

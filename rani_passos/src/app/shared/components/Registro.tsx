@@ -316,7 +316,6 @@ export const Registro: React.FC = () => {
 
                 <Grid item xs={9}>
                   <TextField
-                    disabled
                     value={street}
                     margin="normal"
                     required
@@ -342,7 +341,6 @@ export const Registro: React.FC = () => {
 
                 <Grid item xs={5}>
                   <TextField
-                    disabled
                     value={neighborhood}
                     margin="normal"
                     required
@@ -355,7 +353,6 @@ export const Registro: React.FC = () => {
 
                 <Grid item xs={5}>
                   <TextField
-                    disabled
                     margin="normal"
                     value={city}
                     required
@@ -368,7 +365,6 @@ export const Registro: React.FC = () => {
 
                 <Grid item xs={2}>
                   <TextField
-                    disabled
                     value={uf}
                     margin="normal"
                     required

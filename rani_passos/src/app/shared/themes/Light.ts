@@ -16,6 +16,12 @@ const Light = createTheme({
       light: '#0242a1',
       contrastText: '#ffffff',
     },
+    info: {
+      main: '#fff',
+      dark: '#fff',
+      light: '#fff',
+      contrastText: '#000',
+    },
     background: {
       paper: '#f9f9f9',
       default: '#FFFFFF',
