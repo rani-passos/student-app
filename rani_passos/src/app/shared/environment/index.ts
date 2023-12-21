@@ -3,6 +3,7 @@ export const Environment = {
   INPUT_DE_BUSCA: 'Buscar',
   LISTAGEM_VAZIA: 'Nenhum registro encontrado.',
   URL_BASE: 'https://www.ranipassos.com.br/',
-  // URL_BASE: 'http://localhost:3001/',
   WS: 'ranipassos.com.br',
+  // URL_BASE: 'http://localhost:3001/',
+  // WS: 'localhost:3001',
 };

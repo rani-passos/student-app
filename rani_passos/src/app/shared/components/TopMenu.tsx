@@ -4,6 +4,7 @@ import { useTheme } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import { TermsService } from '../services/terms/TermsService';
 import { useAuthContext, useDrawerContext } from '../../shared/contexts';
+import { Environment } from '../../shared/environment';
 import {
   INotifications,
   NotificationsService,
@@ -109,6 +110,23 @@ export const TopMenu = (props: any) => {
       setOpen((prev) => placement !== newPlacement || !prev);
       setPlacement(newPlacement);
     };
+
+  function connectWebSocket() {
+    const ws = new WebSocket(`wss://${Environment.WS}/cable`);
+
+    ws.onopen = () => {
+      console.log('Conectado ao servidor websoket');
+
+      ws.send(
+        JSON.stringify({
+          command: 'subscribe',
+          identifier: JSON.stringify({
+            channel: 'ChatChannel',
+          }),
+        })
+      );
+    };
+  }
 
   function notificationViewed(id: number) {
     // setIsLoading(true);

@@ -33,8 +33,6 @@ import logo from 'rani_passos/public/assets/images/logo.svg';
 import { IChats, ChatsService } from '../../shared/services/chats/ChatsService';
 import { CoursesService } from '../../shared/services/courses/CoursesService';
 
-const ws = new WebSocket(`wss://${Environment.WS}/cable`);
-
 export const Chat = () => {
   const { isAuth } = useAuthContext();
 
@@ -56,6 +54,8 @@ export const Chat = () => {
   };
 
   function connectWebSocket() {
+    const ws = new WebSocket(`wss://${Environment.WS}/cable`);
+
     ws.onopen = () => {
       console.log('Conectado ao servidor websoket');
 
@@ -76,8 +76,13 @@ export const Chat = () => {
       if (data.type === 'confirm_subscription') return;
 
       if (data.message.id == userId()) {
+        console.log('data.message.messages :>> ', data.message.messages);
         setIsLoadingMessages(false);
         setLastMessage('');
+
+        // chatMessages.push(JSON.parse(data.message.messages));
+        // setChatMessages(chatMessages);
+
         setChatMessages(data.message.messages);
       }
     };
@@ -104,13 +109,6 @@ export const Chat = () => {
     if (!newMessage) return;
     setLastMessage(newMessage);
     setIsLoadingMessages(true);
-
-    if (ws.readyState === WebSocket.OPEN) {
-      console.log('WebSocket está conectado');
-    } else {
-      console.log('WebSocket não está conectado');
-      connectWebSocket();
-    }
 
     const data = { question: newMessage, answer: '' };
     setNewMessage('');
@@ -171,36 +169,7 @@ export const Chat = () => {
   }, []);
 
   React.useEffect(() => {
-    ws.onopen = () => {
-      console.log('Conectado ao servidor websoket');
-
-      ws.send(
-        JSON.stringify({
-          command: 'subscribe',
-          identifier: JSON.stringify({
-            channel: 'ChatChannel',
-          }),
-        })
-      );
-    };
-
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data.type === 'ping') return;
-      if (data.type === 'welcome') return;
-      if (data.type === 'confirm_subscription') return;
-
-      if (data.message.id == userId()) {
-        setIsLoadingMessages(false);
-        setLastMessage('');
-        setChatMessages(data.message.messages);
-      }
-    };
-
-    // Limpeza
-    // return () => {
-    //   ws.close();
-    // };
+    connectWebSocket();
   }, []);
 
   React.useEffect(() => {
@@ -469,6 +438,8 @@ export const Chat = () => {
             display: 'flex',
             alignItems: 'end',
             marginTop: 2,
+            background: '#f9f9f9',
+            padding: '12px',
           }}
         >
           <TextField
@@ -486,7 +457,6 @@ export const Chat = () => {
           />
 
           <IconButton
-            color="info"
             sx={{ p: '10px', marginLeft: 2 }}
             size="large"
             aria-label="directions"
@@ -517,6 +487,7 @@ export const Chat = () => {
         sx={{
           background: 'url(/assets/images/chat/RAV-I-Fundo.png) top center',
           backgroundSize: 'cover',
+          backgroundAttachment: 'fixed',
         }}
       >
         <Container component="main" maxWidth="md">
