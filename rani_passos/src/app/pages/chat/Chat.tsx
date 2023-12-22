@@ -28,7 +28,8 @@ import {
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 
-import logo from 'rani_passos/public/assets/images/logo.svg';
+import imageRavi from 'rani_passos/public/assets/images/chat/ravi.jpeg';
+import imageAluno from 'rani_passos/public/assets/images/chat/aluno.jpeg';
 
 import { IChats, ChatsService } from '../../shared/services/chats/ChatsService';
 import { CoursesService } from '../../shared/services/courses/CoursesService';
@@ -79,10 +80,6 @@ export const Chat = () => {
         console.log('data.message.messages :>> ', data.message.messages);
         setIsLoadingMessages(false);
         setLastMessage('');
-
-        // chatMessages.push(JSON.parse(data.message.messages));
-        // setChatMessages(chatMessages);
-
         setChatMessages(data.message.messages);
       }
     };
@@ -358,7 +355,7 @@ export const Chat = () => {
           <ListItemText
             primary={
               <Box sx={{ display: 'flex' }}>
-                <Avatar alt="Aluno" src="/static/images/avatar/1.jpg" />
+                <Avatar alt="Aluno" src={imageAluno} />
                 <Box sx={{ marginLeft: '10px', paddingTop: '10px' }}>
                   {formattedText}
                 </Box>
@@ -369,7 +366,7 @@ export const Chat = () => {
           <ListItemText
             secondary={
               <Box sx={{ display: 'flex' }}>
-                <Avatar alt="Chat RAV" src={logo} />
+                <Avatar alt="Chat RAV" src={imageRavi} />
                 <Box sx={{ marginLeft: '10px' }}>{formattedText}</Box>
               </Box>
             }
@@ -379,18 +376,18 @@ export const Chat = () => {
     );
   };
 
-  const ListItemTextQuestion: React.FC<{ text: string }> = ({ text }) => {
-    return (
-      <ListItemText
-        primary={
-          <Box sx={{ display: 'flex' }}>
-            <Avatar alt="Aluno" src="/static/images/avatar/1.jpg" />
-            <Box sx={{ marginLeft: '10px', paddingTop: '10px' }}>{text}</Box>
-          </Box>
-        }
-      />
-    );
-  };
+  // const ListItemTextQuestion: React.FC<{ text: string }> = ({ text }) => {
+  //   return (
+  //     <ListItemText
+  //       primary={
+  //         <Box sx={{ display: 'flex' }}>
+  //           <Avatar alt="Aluno" src="/static/images/avatar/1.jpg" />
+  //           <Box sx={{ marginLeft: '10px', paddingTop: '10px' }}>{text}</Box>
+  //         </Box>
+  //       }
+  //     />
+  //   );
+  // };
 
   function renderChat() {
     return (
