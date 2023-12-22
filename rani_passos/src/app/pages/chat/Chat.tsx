@@ -153,14 +153,14 @@ export const Chat = () => {
 
   function rowsTextField() {
     const charsPerLine = window.innerWidth < 768 ? 37 : 103;
+
     const lines = newMessage.split('\n');
+    const countEnterLines = lines.length;
+    const countLines = Math.floor(newMessage.length / charsPerLine);
+    const totalCount = countEnterLines + countLines;
 
-    const countLines = lines.reduce((total, line) => {
-      return total + Math.ceil(line.length / charsPerLine);
-    }, 0);
-
-    const maxRows = 6;
-    return Math.min(countLines, maxRows);
+    if (totalCount >= 6) return 6;
+    return totalCount;
   }
 
   React.useEffect(() => {
