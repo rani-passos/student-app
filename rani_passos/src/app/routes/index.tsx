@@ -20,7 +20,7 @@ export const Rotas = () => {
       <Route path="/" element={<Painel />} />
       <Route path="/minha-conta" element={<Perfil />} />
       <Route path="/pedidos" element={<Pedidos />} />
-      <Route path="/chat-rav" element={<Chat />} />
+      <Route path="/chat-rav-i" element={<Chat />} />
       <Route path="/curso/:id" element={<Aula />} />
       <Route path="/termos-uso" element={<Termos />} />
       {/* Rotas Publicas */}
