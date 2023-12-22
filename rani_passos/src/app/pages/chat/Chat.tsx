@@ -15,6 +15,7 @@ import {
   Alert,
   AlertTitle,
   LinearProgress,
+  CircularProgress,
   Link,
   Button,
   Avatar,
@@ -31,13 +32,23 @@ import SendIcon from '@mui/icons-material/Send';
 import imageRavi from 'rani_passos/public/assets/images/chat/ravi.jpeg';
 import imageAluno from 'rani_passos/public/assets/images/chat/aluno.jpeg';
 
-import { IChats, ChatsService } from '../../shared/services/chats/ChatsService';
+import {
+  IChats,
+  IInformations,
+  ITips,
+  ChatsService,
+} from '../../shared/services/chats/ChatsService';
 import { CoursesService } from '../../shared/services/courses/CoursesService';
 
 export const Chat = () => {
   const { isAuth } = useAuthContext();
 
   const [chatMessages, setChatMessages] = React.useState<IChats[]>([]);
+  const [chatInformations, setChatInformations] = React.useState<
+    IInformations[]
+  >([]);
+  const [chatTips, setChatTips] = React.useState<ITips[]>([]);
+  const [tip, setTip] = React.useState<ITips | null>(null);
   const [accessChatRav, setAccessChatRav] = React.useState(false);
   const [newMessage, setNewMessage] = React.useState('');
   const [dailyQuota, setDailyQuota] = React.useState(0);
@@ -80,6 +91,7 @@ export const Chat = () => {
         console.log('data.message.messages :>> ', data.message.messages);
         setIsLoadingMessages(false);
         setLastMessage('');
+        setTip(null);
         setChatMessages(data.message.messages);
       }
     };
@@ -106,6 +118,7 @@ export const Chat = () => {
     if (!newMessage) return;
     setLastMessage(newMessage);
     setIsLoadingMessages(true);
+    selectNewTip();
 
     const data = { question: newMessage, answer: '' };
     setNewMessage('');
@@ -123,20 +136,19 @@ export const Chat = () => {
   //   }
   // };
 
-  if (!isAuth) {
-    return <Navigate to="/login" replace />;
+  function selectNewTip() {
+    newTip();
+    const intervalo = setInterval(newTip, 10000);
+    return () => clearInterval(intervalo);
   }
 
-  function chatsGetAll() {
-    ChatsService.getAll().then((result: any) => {
-      setIsLoading(false);
-      if (result instanceof Error) {
-        console.error('Chats' + result.message);
-      } else {
-        setIsLoadingMessages(false);
-        setChatMessages(result);
-      }
-    });
+  function newTip() {
+    const indiceAleatorio = Math.floor(Math.random() * chatTips.length);
+    setTip(chatTips[indiceAleatorio]);
+  }
+
+  if (!isAuth) {
+    return <Navigate to="/login" replace />;
   }
 
   function rowsTextField() {
@@ -162,7 +174,35 @@ export const Chat = () => {
   }, [chatMessages]);
 
   React.useEffect(() => {
-    chatsGetAll();
+    ChatsService.getAll().then((result: any) => {
+      setIsLoading(false);
+      if (result instanceof Error) {
+        console.error('Chats' + result.message);
+      } else {
+        setIsLoadingMessages(false);
+        setChatMessages(result);
+      }
+    });
+  }, []);
+
+  React.useEffect(() => {
+    ChatsService.getInformations().then((result: any) => {
+      if (result instanceof Error) {
+        console.error('Informations' + result.message);
+      } else {
+        setChatInformations(result);
+      }
+    });
+  }, []);
+
+  React.useEffect(() => {
+    ChatsService.getTips().then((result: any) => {
+      if (result instanceof Error) {
+        console.error('Informations' + result.message);
+      } else {
+        setChatTips(result);
+      }
+    });
   }, []);
 
   React.useEffect(() => {
@@ -245,39 +285,9 @@ export const Chat = () => {
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               <ul>
-                <li>
-                  Alunos não assinantes do Chat-RAV, ou que possuem algum curso
-                  com acesso ao Chat-RAV de forma gratuita, terão cortesia de
-                  apenas uma pergunta por dia, não acumulável pelos dias não
-                  utilizados.
-                </li>
-                <li>
-                  Alunos assinantes do Chat-RAV, ou que possuem algum curso pago
-                  com acesso ao Chat-RAV, terão direito a 20 perguntas por dia,
-                  não acumulável pelos dias não utilizado.
-                </li>
-                <li>
-                  o RAV é um assistente de Inteligência artificial e não é um
-                  modelo funcional para atividades alheias a assuntos de
-                  informática e tecnologia da informação.
-                </li>
-                <li>
-                  Esse assistente é constantemente atualizado e melhorado
-                  conforme evolução na tecnologia de inteligência artificial no
-                  Brasil e no mundo.
-                </li>
-                <li>
-                  Não nos responsabilizamos pelo uso indevido da ferramenta, por
-                  exemplo, para utilização visando resultados obscenos, cunho
-                  sexual, ilegal, religioso, ou qualquer outro fim diferente do
-                  proposto para estudo de informática e tecnologia da
-                  Informação.
-                </li>
-                <li>
-                  A tecnologia RAV não é um assistente de analise de edital,
-                  consultor de estudos ou guia para outros temas diferentes de
-                  informática.
-                </li>
+                {chatInformations.map((information, index) => (
+                  <li key={index}>{information.content}</li>
+                ))}
               </ul>
             </DialogContentText>
           </DialogContent>
@@ -426,7 +436,16 @@ export const Chat = () => {
 
           {isLoadingMessages && (
             <Box sx={{ width: '100%', padding: 2 }}>
-              <LinearProgress />
+              <Box sx={{ display: 'flex' }}>
+                <Avatar alt="Chat RAV" src={imageRavi} />
+                <Box sx={{ marginLeft: '10px' }}>
+                  <Typography>
+                    <b>Enquanto produzo sua resposta, se liga nessa dica:</b>
+                  </Typography>
+                  <Typography>{tip?.content}</Typography>
+                </Box>
+                <CircularProgress />
+              </Box>
             </Box>
           )}
         </List>
