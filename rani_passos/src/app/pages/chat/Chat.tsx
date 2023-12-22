@@ -152,14 +152,15 @@ export const Chat = () => {
   }
 
   function rowsTextField() {
+    const charsPerLine = window.innerWidth < 768 ? 37 : 103;
     const lines = newMessage.split('\n');
-    const countEnterLines = lines.length;
-    const countLines = Math.floor(newMessage.length / 103);
-    const totalCount = countEnterLines + countLines;
 
-    if (totalCount >= 6) return 6;
+    const countLines = lines.reduce((total, line) => {
+      return total + Math.ceil(line.length / charsPerLine);
+    }, 0);
 
-    return totalCount;
+    const maxRows = 6;
+    return Math.min(countLines, maxRows);
   }
 
   React.useEffect(() => {
@@ -493,7 +494,7 @@ export const Chat = () => {
         sx={{
           background: 'url(/assets/images/chat/RAV-I.png) top center',
           backgroundSize: 'cover',
-          padding: '60px 0',
+          padding: '55px 0',
           marginTop: { xs: '70px', sm: '70px', md: '70px' },
           borderBottom: '2px solid #fff',
         }}
