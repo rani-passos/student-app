@@ -258,7 +258,7 @@ export const Chat = () => {
           }}
         >
           <Link
-            href={'https://ranipassos.com.br'}
+            href={'https://www.youtube.com/watch?v=PeSKW2BlLxc'}
             target="_blank"
             rel="noopener noreferrer"
           >
