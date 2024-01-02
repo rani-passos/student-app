@@ -141,7 +141,7 @@ export const Cursos: React.FC = () => {
         if (result instanceof Error) {
           setError(true);
         } else {
-          setQtdCourses(Math.ceil(result.qtd_total / 10));
+          setQtdCourses(Math.ceil(result.qtd_total / 9));
           setCoursesList(result.courses);
         }
       });
