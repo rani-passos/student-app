@@ -75,7 +75,7 @@ export const TopMenu = (props: any) => {
   const pages = [
     { name: 'Cursos', url: '/' },
     { name: 'Pedidos', url: '/pedidos' },
-    { name: 'Meus dados', url: '/minha-conta' },
+    { name: 'CHAT RAV-I', url: '/chat-rav-i' },
   ];
 
   const handleSair = () => {

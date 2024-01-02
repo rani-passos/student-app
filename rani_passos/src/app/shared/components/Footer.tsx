@@ -33,11 +33,8 @@ export const Footer = () => {
                   mb: 2,
                 }}
               />
-              <Typography
-                variant="body2"
-                onClick={() => navigate('/chat-rav-i')}
-              >
-                Rani Passos | Todos os direitos reservados | Chat
+              <Typography variant="body2">
+                Rani Passos | Todos os direitos reservados
               </Typography>
             </Box>
             <Box component="div" sx={{ margin: '0px 32px' }}>
