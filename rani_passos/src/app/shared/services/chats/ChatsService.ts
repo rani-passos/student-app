@@ -61,6 +61,21 @@ const dailyQuota = async (): Promise<any | Error> => {
   }
 };
 
+const reportError = async (dataError: any): Promise<any | Error> => {
+  try {
+    const { data } = await Api.post(
+      '/chat_gpt_messages/report_error',
+      dataError
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return new Error(
+      (error as { message: string }).message || 'Erro ao listar registros.'
+    );
+  }
+};
+
 const create = async (chat: IChats): Promise<any | Error> => {
   try {
     const { data } = await Api.post('/chat_gpt_messages', chat);
@@ -79,4 +94,5 @@ export const ChatsService = {
   dailyQuota,
   getInformations,
   getTips,
+  reportError,
 };

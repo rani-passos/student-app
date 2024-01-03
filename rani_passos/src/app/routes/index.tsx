@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Perfil from '../pages/usuario/Perfil';
 import Aula from '../pages/cursos/Aula';
 import { Pedidos } from '../pages';
-import { Chat } from '../pages';
+import { Chat, ReportarErro } from '../pages';
 import { Termos } from '../pages';
 import { Painel } from '../pages';
 import {
@@ -23,6 +23,7 @@ export const Rotas = () => {
       <Route path="/chat-rav-i" element={<Chat />} />
       <Route path="/curso/:id" element={<Aula />} />
       <Route path="/termos-uso" element={<Termos />} />
+      <Route path="/reportar-erro" element={<ReportarErro />} />
       {/* Rotas Publicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/esqueci" element={<Esqueci />} />

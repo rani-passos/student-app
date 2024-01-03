@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import { Environment } from '../../shared/environment';
 import { Footer, TopMenu } from '../../shared/components';
+import { useNavigate } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import { useAuthContext } from '../../shared/contexts';
 import {
@@ -57,6 +58,8 @@ export const Chat = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [isLoadingMessages, setIsLoadingMessages] = React.useState(false);
   const messagesEndRef = React.useRef<HTMLUListElement>(null);
+
+  const navigate = useNavigate();
 
   const userId = () => {
     const userData = sessionStorage.getItem('USER_DATA');
@@ -257,26 +260,37 @@ export const Chat = () => {
             marginTop: '15px',
           }}
         >
-          <Link
-            href={'https://www.youtube.com/watch?v=PeSKW2BlLxc'}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button
-              color="info"
-              sx={{ margin: '16px 0px' }}
-              variant="contained"
+          <Box>
+            <Link
+              href={'https://www.youtube.com/watch?v=PeSKW2BlLxc'}
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Como Usar?
+              <Button
+                color="info"
+                sx={{ margin: '16px 0px' }}
+                variant="contained"
+              >
+                Como Usar?
+              </Button>
+            </Link>
+            <Button
+              sx={{ margin: '16px 4px' }}
+              variant="contained"
+              color="info"
+              onClick={() => setOpenDialog(true)}
+            >
+              Informações Importantes
             </Button>
-          </Link>
+          </Box>
+
           <Button
+            color="info"
             sx={{ margin: '16px 0px' }}
             variant="contained"
-            color="info"
-            onClick={() => setOpenDialog(true)}
+            onClick={() => navigate('/reportar-erro')}
           >
-            Informações Importantes
+            Reportar Erro
           </Button>
         </Box>
         <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
