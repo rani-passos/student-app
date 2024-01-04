@@ -79,7 +79,11 @@ export const ReportarErro = () => {
       <>
         {success ? (
           <Alert severity="success" sx={{ marginBottom: 3, width: '100%' }}>
-            <AlertTitle>Mensagem informada com sucesso</AlertTitle>
+            <AlertTitle>
+              Sua atenção aos detalhes faz uma grande diferença para nós.
+              Obrigado pelo seu reporte, vamos trabalhar para corrigir o erro e
+              melhorar sua experiência com o RAV-I.
+            </AlertTitle>
           </Alert>
         ) : null}
       </>
@@ -116,8 +120,8 @@ export const ReportarErro = () => {
           }}
         >
           <Typography>
-            Descreva seu problema em detalhes. Inclua passos para reproduzir o
-            erro, e navegador ou informações do aparelho.{' '}
+            Parece que você encontrou algo que não está correto. Isso é ótimo!
+            Com a sua ajuda, podemos tornar nossa plataforma ainda melhor.
           </Typography>
         </Box>
 
