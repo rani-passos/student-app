@@ -5,6 +5,7 @@ import { Environment } from '../../shared/environment';
 import { Footer, TopMenu } from '../../shared/components';
 import { Navigate } from 'react-router-dom';
 import { useAuthContext } from '../../shared/contexts';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   TextField,
@@ -46,6 +47,8 @@ export const ReportarErro = () => {
   const [message, setMessage] = React.useState<string>('');
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = (event: React.BaseSyntheticEvent) => {
     event.preventDefault();
@@ -183,6 +186,15 @@ export const ReportarErro = () => {
       >
         <Container component="main" maxWidth="md">
           <Box sx={{ marginBottom: 8, padding: '4px 0px' }}>
+            <Button
+              color="info"
+              sx={{ margin: '16px 0px' }}
+              variant="contained"
+              onClick={() => navigate('/chat-rav-i')}
+            >
+              Voltar
+            </Button>
+
             {renderFormError()}
             {renderSuccessMessage()}
           </Box>
