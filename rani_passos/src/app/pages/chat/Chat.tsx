@@ -250,6 +250,11 @@ export const Chat = () => {
     );
   }
 
+  function validNewMessage(message: string) {
+    if (message.length >= 2000) return;
+    setNewMessage(message);
+  }
+
   function renderAction() {
     return (
       <>
@@ -480,7 +485,7 @@ export const Chat = () => {
             label="Vamos aprender juntos. Pergunte aqui! 📚"
             value={newMessage}
             disabled={dailyQuota == 0 || isLoadingMessages}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={(e) => validNewMessage(e.target.value)}
             sx={{
               width: '93%',
               background: '#fff',
