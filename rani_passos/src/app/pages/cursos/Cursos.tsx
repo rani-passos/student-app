@@ -169,7 +169,7 @@ export const Cursos: React.FC = () => {
             borderRadius: '8px',
           }}
         >
-          {coursesList.length > 0 && (
+          {coursesList.length > 0 || searchTerm.length > 0 ? (
             <form onSubmit={handleSubmit}>
               <InputBase
                 sx={{ margin: '4px 0px 0px 16px', flex: 1 }}
@@ -181,7 +181,7 @@ export const Cursos: React.FC = () => {
                 <SearchIcon />
               </IconButton>
             </form>
-          )}
+          ) : null}
         </Box>
       </Box>
       <Grid
