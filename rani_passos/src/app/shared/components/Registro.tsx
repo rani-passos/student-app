@@ -323,6 +323,7 @@ export const Registro: React.FC = () => {
                     name="street"
                     label="Endereço"
                     id="street"
+                    onChange={(e) => setStreet(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={3}>
@@ -348,6 +349,7 @@ export const Registro: React.FC = () => {
                     name="neighborhood"
                     label="Bairro"
                     id="neighborhood"
+                    onChange={(e) => setNeighborhood(e.target.value)}
                   />
                 </Grid>
 
@@ -360,6 +362,7 @@ export const Registro: React.FC = () => {
                     name="city"
                     label="Cidade"
                     id="city"
+                    onChange={(e) => setCity(e.target.value)}
                   />
                 </Grid>
 
