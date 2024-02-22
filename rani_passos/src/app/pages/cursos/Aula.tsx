@@ -245,19 +245,36 @@ export const Aula: React.FC = () => {
                     ''
                   )}
                   <Typography variant="body1">Arquivo: {media.name}</Typography>
-                  <Link
-                    href={`https://ranipassos.com.br${media.file}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button
-                      sx={{ margin: '16px 0px' }}
-                      variant="contained"
-                      startIcon={<DownloadIcon />}
+                  {media.file.includes('ranipassos.com.br') ? (
+                    <Link
+                      href={media.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      Baixar
-                    </Button>
-                  </Link>
+                      <Button
+                        sx={{ margin: '16px 0px' }}
+                        variant="contained"
+                        startIcon={<DownloadIcon />}
+                      >
+                        Baixar
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`https://ranipassos.com.br${media.file}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button
+                        sx={{ margin: '16px 0px' }}
+                        variant="contained"
+                        startIcon={<DownloadIcon />}
+                      >
+                        Baixar
+                      </Button>
+                    </Link>
+                  )}
+
                   {checkFileType(media.file) === 'mp3' ? (
                     <Box sx={{ padding: '16px 0px' }}>
                       <Typography variant="body1">Player Online 🔊</Typography>
