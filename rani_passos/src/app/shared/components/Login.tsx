@@ -20,7 +20,7 @@ export const Login: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       $('#loading').fadeOut('slow');
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -57,7 +57,7 @@ export const Login: React.FC = () => {
             <div className="row">
               <div className="col-sm-12">
                 <nav className="navbar navbar-expand-lg navbar-light p-0">
-                  <a className="navbar-brand" href="index.html">
+                  <a className="navbar-brand" href="/">
                     {' '}
                     <img
                       className="img-fluid logo"
@@ -144,13 +144,6 @@ export const Login: React.FC = () => {
           </div>
         </div>
       </section>
-
-      <div id="back-to-top">
-        <a className="top" href="#top" id="top">
-          {' '}
-          <i className="ri-eject-line"></i>{' '}
-        </a>
-      </div>
     </>
   );
 };

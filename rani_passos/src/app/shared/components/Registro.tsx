@@ -1,20 +1,11 @@
-import * as React from 'react';
-import InputMask from 'react-input-mask';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import React, { useEffect } from 'react';
 import Alert from '@mui/material/Alert';
-import PersonIcon from '@mui/icons-material/Person';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { useNavigate } from 'react-router-dom';
-import { AppBar } from '@mui/material';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { useAuthContext } from '../contexts';
 import { UserService } from '../services/user/UserService';
-import { Api } from '../services/api/axios-config';
+import { Navigate } from 'react-router-dom';
+import logo from 'rani_passos/public/assets/images/logo.svg';
+import $ from 'jquery';
 
 export const Registro: React.FC = () => {
   const [username, setUsername] = React.useState<string>('');
@@ -34,15 +25,25 @@ export const Registro: React.FC = () => {
   const [uf, setUf] = React.useState<string>('');
   const [neighborhood, setNeighborhood] = React.useState<string>('');
 
-  const navigate = useNavigate();
+  const { login } = useAuthContext();
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      $('#loading').fadeOut('slow');
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const { isAuth } = useAuthContext();
+  if (isAuth) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleSubmit = (event: React.BaseSyntheticEvent) => {
     event.preventDefault();
     setFieldsFilled(false);
+    setMessageError('');
     const data = {
       user: {
         name: username,
@@ -76,14 +77,13 @@ export const Registro: React.FC = () => {
 
     console.log('handleSubmit', data);
     UserService.create(data)
-      .then((res) => {
+      .then(async (res) => {
         if (res instanceof Error) {
           setError(true);
           console.log('res instanceof Error', res);
         } else {
           if (res.data) {
-            setSuccess(true);
-            setError(false);
+            await login(email, password);
           } else {
             console.log('else', res);
           }
@@ -155,253 +155,269 @@ export const Registro: React.FC = () => {
 
   return (
     <>
-      <AppBar
-        position="fixed"
-        sx={{
-          padding: '8px 0px',
-          backgroundColor: 'primary',
-          color: '#FFF',
-          boxShadow: 'none',
-          borderBottom: '1px solid #ddd',
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            color: '#FFF',
-          }}
-        >
-          <Button
-            variant="text"
-            color="inherit"
-            startIcon={<ChevronLeftIcon />}
-            onClick={handleBack}
-          >
-            Voltar
-          </Button>
-        </Box>
-      </AppBar>
-      <Container component="main" maxWidth="md">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <PersonIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Cadastro
-          </Typography>
+      <div id="loading">
+        <div id="loading-center"></div>
+      </div>
 
-          {success ? (
-            <p style={{ padding: '16px 0px' }}>
-              Cadastro realizado com sucesso!
-            </p>
-          ) : (
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
-            >
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField
-                    value={username}
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="username"
-                    label="Nome Completo"
-                    name="username"
-                    autoFocus
-                    onChange={handleUsername}
-                  />
-                </Grid>
+      <header id="main-header">
+        <div className="main-header">
+          <div className="container-fluid py-3">
+            <div className="row">
+              <div className="col-sm-12">
+                <nav className="navbar navbar-expand-lg navbar-light p-0">
+                  <a className="navbar-brand" href="/">
+                    {' '}
+                    <img
+                      className="img-fluid logo"
+                      src={logo}
+                      alt="Logo Rani"
+                    />{' '}
+                  </a>
+                </nav>
+                <div className="nav-overlay"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
 
-                <Grid item xs={6}>
-                  <TextField
-                    value={email}
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email"
-                    name="email"
-                    type="email"
-                    onChange={handleEmail}
-                  />
-                </Grid>
+      <section className="page-title-box">
+        <div
+          className="container-fluid page-title"
+          style={{ paddingTop: 25 }}
+        ></div>
+      </section>
 
-                <Grid item xs={6}>
-                  <TextField
-                    value={password}
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="new-password"
-                    label="Senha"
-                    type="password"
-                    id="new-password"
-                    onChange={handlePassword}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    value={confirmPassword}
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="cNewPassword"
-                    label="Confirme a Senha"
-                    type="password"
-                    id="cNewPassword"
-                    onChange={handleConfirmPassword}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <InputMask
-                    mask="999.999.999-99"
-                    value={cpf}
-                    onChange={handleCpf}
-                  >
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="cpf"
-                      label="CPF"
-                      name="cpf"
-                      placeholder="XXX.XXX.XXX-XX"
-                    />
-                  </InputMask>
-                </Grid>
-                <Grid item xs={4}>
-                  <InputMask
-                    mask="(99) 99999-9999"
-                    value={phone}
-                    onChange={handlePhone}
-                  >
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="phone"
-                      label="Telefone"
-                      name="phone"
-                      placeholder="(XX) 9 9999-9999"
-                    />
-                  </InputMask>
-                </Grid>
-                <Grid item xs={4}>
-                  <InputMask mask="99999-999" value={cep} onChange={handleCEP}>
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="cep"
-                      label="CEP"
-                      name="cep"
-                      placeholder="00000-000"
-                    />
-                  </InputMask>
-                </Grid>
+      <section className="space-mtb">
+        <div className="container">
+          <div className="row justify-content-center align-items-center height-self-center">
+            <div className="col-lg-10 col-md-12 align-self-center">
+              <a className="btn btn-hover mb-5" href="/">
+                Voltar
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="container">
+          <div className="row justify-content-center align-items-center height-self-center">
+            <div className="col-lg-10 col-md-12 align-self-center">
+              <div className="sign-user_card ">
+                <div className="sign-in-page-data">
+                  <div className="sign-in-from w-100 m-auto">
+                    <h3 className="mb-3 text-center">CADASTRO</h3>
+                    <form className="mt-4" action="#" onSubmit={handleSubmit}>
+                      <div className="row">
+                        <div className="col-lg-6 col-md-12">
+                          <div className="form-group">
+                            <label>Nome Completo</label>
+                            <input
+                              type="text"
+                              className="form-control mb-0"
+                              id="username"
+                              onChange={handleUsername}
+                              autoComplete="off"
+                              name="username"
+                              value={username}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-md-12">
+                          <div className="form-group">
+                            <label>Email</label>
+                            <input
+                              type="email"
+                              className="form-control mb-0"
+                              id="email"
+                              onChange={handleEmail}
+                              autoComplete="off"
+                              name="email"
+                              value={email}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-md-12">
+                          <div className="form-group">
+                            <label>Senha</label>
+                            <input
+                              type="password"
+                              className="form-control mb-0"
+                              id="newPassword"
+                              onChange={handlePassword}
+                              autoComplete="off"
+                              name="newPassword"
+                              value={password}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-md-12">
+                          <div className="form-group">
+                            <label>Confirme a Senha</label>
+                            <input
+                              type="password"
+                              className="form-control mb-0"
+                              id="cNewPassword"
+                              onChange={handleConfirmPassword}
+                              autoComplete="off"
+                              name="cNewPassword"
+                              value={confirmPassword}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-4 col-md-12">
+                          <div className="form-group">
+                            <label>CPF</label>
+                            <input
+                              type="text"
+                              className="form-control mb-0"
+                              id="cpf"
+                              onChange={handleCpf}
+                              autoComplete="off"
+                              name="cpf"
+                              value={cpf}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-4 col-md-12">
+                          <div className="form-group">
+                            <label>Telefone</label>
+                            <input
+                              type="text"
+                              className="form-control mb-0"
+                              id="phone"
+                              onChange={handlePhone}
+                              autoComplete="off"
+                              name="phone"
+                              value={phone}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-4 col-md-12">
+                          <div className="form-group">
+                            <label>CEP</label>
+                            <input
+                              type="text"
+                              className="form-control mb-0"
+                              id="cep"
+                              onChange={handleCEP}
+                              autoComplete="off"
+                              name="cep"
+                              value={cep}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-9 col-md-12">
+                          <div className="form-group">
+                            <label>Endereço</label>
+                            <input
+                              type="text"
+                              className="form-control mb-0"
+                              id="street"
+                              onChange={(e) => setStreet(e.target.value)}
+                              autoComplete="off"
+                              name="street"
+                              value={street}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-3 col-md-12">
+                          <div className="form-group">
+                            <label>Nº</label>
+                            <input
+                              type="number"
+                              className="form-control mb-0"
+                              id="number"
+                              onChange={handleNumber}
+                              autoComplete="off"
+                              name="number"
+                              value={number}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-5 col-md-12">
+                          <div className="form-group">
+                            <label>Bairro</label>
+                            <input
+                              type="text"
+                              className="form-control mb-0"
+                              id="neighborhood"
+                              onChange={(e) => setNeighborhood(e.target.value)}
+                              autoComplete="off"
+                              name="neighborhood"
+                              value={neighborhood}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-5 col-md-12">
+                          <div className="form-group">
+                            <label>Cidade</label>
+                            <input
+                              type="text"
+                              className="form-control mb-0"
+                              id="city"
+                              onChange={(e) => setCity(e.target.value)}
+                              autoComplete="off"
+                              name="city"
+                              value={city}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-2 col-md-12">
+                          <div className="form-group">
+                            <label>UF</label>
+                            <input
+                              type="text"
+                              className="form-control mb-0"
+                              id="uf"
+                              onChange={(e) => setUf(e.target.value)}
+                              autoComplete="off"
+                              name="uf"
+                              value={uf}
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
 
-                <Grid item xs={9}>
-                  <TextField
-                    value={street}
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="street"
-                    label="Endereço"
-                    id="street"
-                    onChange={(e) => setStreet(e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={3}>
-                  <TextField
-                    value={number}
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="number"
-                    label="Nº"
-                    type="number"
-                    id="number"
-                    onChange={handleNumber}
-                  />
-                </Grid>
+                      {fieldsFilled ? (
+                        <Alert severity="error">{messageError}</Alert>
+                      ) : null}
 
-                <Grid item xs={5}>
-                  <TextField
-                    value={neighborhood}
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="neighborhood"
-                    label="Bairro"
-                    id="neighborhood"
-                    onChange={(e) => setNeighborhood(e.target.value)}
-                  />
-                </Grid>
+                      {error ? (
+                        <Alert severity="error">
+                          Erro ao enviar cadastro, confira se preencheu
+                          corretamente ou e-mail e/ou CPF já foi cadastrado!
+                        </Alert>
+                      ) : null}
 
-                <Grid item xs={5}>
-                  <TextField
-                    margin="normal"
-                    value={city}
-                    required
-                    fullWidth
-                    name="city"
-                    label="Cidade"
-                    id="city"
-                    onChange={(e) => setCity(e.target.value)}
-                  />
-                </Grid>
+                      <button
+                        type="submit"
+                        className="btn btn-hover w-100 mt-3"
+                      >
+                        Cadastrar
+                      </button>
+                    </form>
 
-                <Grid item xs={2}>
-                  <TextField
-                    value={uf}
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="uf"
-                    label="UF"
-                    id="uf"
-                  />
-                </Grid>
-              </Grid>
-
-              {fieldsFilled ? (
-                <Alert severity="error">{messageError}</Alert>
-              ) : null}
-
-              {error ? (
-                <Alert severity="error">
-                  Erro ao enviar cadastro, confira se preencheu corretamente ou
-                  e-mail e/ou CPF já foi cadastrado!
-                </Alert>
-              ) : null}
-
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 6 }}
-              >
-                Cadastrar
-              </Button>
-            </Box>
-          )}
-        </Box>
-      </Container>
+                    <div className="mt-2">
+                      <Typography color="error">{error}</Typography>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 };

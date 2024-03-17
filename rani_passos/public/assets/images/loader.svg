@@ -2,13 +2,13 @@
 	<g transform="matrix(0, 1, -1, 0, 470.501556, 21.386433)">
 		<g>
 			<!--Main Circle -->
-			<circle style="fill: rgba(216, 216, 216, 0); stroke-width: 20px; stroke: #e00813;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.682763, 0.670073, 0, 44.973633, 381.72467)"></circle>
+			<circle style="fill: rgba(216, 216, 216, 0); stroke-width: 20px; stroke: #6a6bec;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.682763, 0.670073, 0, 44.973633, 381.72467)"></circle>
 			<!-- Circles -->
-			<circle id="1" style="stroke-width: 5.9135px; stroke: #e00813; fill: #e00813;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.14346, 0.140287, 0, 60.339737, 352.595886)"></circle>
-			<circle id="2" style="stroke-width: 5.9135px; stroke: #e00813; fill: #e00813;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.14346, 0.140287, 0, 53.702332, 166.755417)"></circle>
-			<circle id="3" style="stroke-width: 5.9135px; stroke: #e00813; fill: #e00813;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.14346, 0.140287, 0, 224.793839, 107.020905)"></circle>
-			<circle id="4" style="stroke-width: 5.9135px; stroke: #e00813; fill: #e00813;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.14346, 0.140287, 0, 334.675781, 249.351364)"></circle>
-			<circle id="5" style="stroke-width: 5.9135px; stroke: #e00813; fill: #e00813;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.14346, 0.140287, 0, 230.693512, 401.268677)"></circle>
+			<circle id="1" style="stroke-width: 5.9135px; stroke: #6a6bec; fill: #6a6bec;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.14346, 0.140287, 0, 60.339737, 352.595886)"></circle>
+			<circle id="2" style="stroke-width: 5.9135px; stroke: #6a6bec; fill: #6a6bec;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.14346, 0.140287, 0, 53.702332, 166.755417)"></circle>
+			<circle id="3" style="stroke-width: 5.9135px; stroke: #6a6bec; fill: #6a6bec;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.14346, 0.140287, 0, 224.793839, 107.020905)"></circle>
+			<circle id="4" style="stroke-width: 5.9135px; stroke: #6a6bec; fill: #6a6bec;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.14346, 0.140287, 0, 334.675781, 249.351364)"></circle>
+			<circle id="5" style="stroke-width: 5.9135px; stroke: #6a6bec; fill: #6a6bec;" cx="234.513" cy="255.899" r="232.464" transform="matrix(0, -0.14346, 0.140287, 0, 230.693512, 401.268677)"></circle>
 			<!-- Animations -->
 			<!-- Animations 1 -->
 			<animate id="a1-1" href="#1" attributeName="cx" from="234.513" to="234.513" values="234.513; 84.513; 234.513" dur="0.5s" begin="0s;a1-1.end + 1.5s" fill="freeze"/>
