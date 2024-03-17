@@ -106,17 +106,6 @@ export const Cursos: React.FC = () => {
                 }
                 alt="imagem do curso"
               />
-              <CardContent>
-                <Typography
-                  gutterBottom
-                  variant="h6"
-                  component="p"
-                  color="secondary"
-                  sx={{ textAlign: 'center' }}
-                >
-                  {curso.title}
-                </Typography>
-              </CardContent>
             </CardActionArea>
           </Card>
         </Grid>

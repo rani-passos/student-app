@@ -1,7 +1,8 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useAuthContext } from '../contexts';
 import { Navigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
+import $ from 'jquery';
 
 import logo from 'rani_passos/public/assets/images/logo.svg';
 
@@ -15,6 +16,14 @@ export const Login: React.FC = () => {
   const [password, setPassword] = React.useState<string>('');
 
   const { login } = useAuthContext();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      $('#loading').fadeOut('slow');
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSubmit = async (event: React.BaseSyntheticEvent) => {
     event.preventDefault();
