@@ -1,16 +1,9 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import React, { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { IUserData, UserService } from '../../shared/services/user/UserService';
-import { AppBar, CircularProgress } from '@mui/material';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useNavigate } from 'react-router-dom';
+import logo from 'rani_passos/public/assets/images/logo.svg';
+import $ from 'jquery';
 
 export const Esqueci: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
@@ -19,6 +12,14 @@ export const Esqueci: React.FC = () => {
   const [success, setSuccess] = React.useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      $('#loading').fadeOut('slow');
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleBack = () => {
     navigate(-1);
   };
@@ -26,7 +27,7 @@ export const Esqueci: React.FC = () => {
   const handleSubmit = (event: React.BaseSyntheticEvent) => {
     event.preventDefault();
     setLoading(true);
-    UserService.forgotPassword(email).then( (result:any) =>{
+    UserService.forgotPassword(email).then((result: any) => {
       if (result instanceof Error) {
         setSuccess('');
         setError(result.message);
@@ -35,8 +36,7 @@ export const Esqueci: React.FC = () => {
         setSuccess(result.messages);
       }
       setLoading(false);
-    }
-    );
+    });
   };
 
   const handleEmail = (event: React.BaseSyntheticEvent) => {
@@ -47,73 +47,92 @@ export const Esqueci: React.FC = () => {
   };
 
   return (
-    <><AppBar
-      position="fixed"
-      sx={{
-        padding: '8px 0px',
-        backgroundColor: 'primary',
-        color: '#FFF',
-        boxShadow: 'none',
-        borderBottom: '1px solid #ddd',
-        zIndex: (theme) => theme.zIndex.drawer + 1
-      }}
-    >
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', color: '#FFF', }}>
-        <Button variant="text" color='inherit' startIcon={<ChevronLeftIcon />} onClick={handleBack}>
-          Voltar
-        </Button>
-      </Box>
-    </AppBar><Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5" mb={1}>
-            Alterar Senha
-        </Typography>
-        <Typography component="p" variant="body1">
-            Informe o e-mail cadastrado abaixo.
-        </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{ mt: 1 }}
-        >
-          <TextField
-            value={email}
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            autoFocus
-            onChange={handleEmail} />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-              Recuperar Senha
-          </Button>
-          {loading ? <Box sx={{ display: 'flex', justifyContent: 'center', margin: '16px' }}>
-            <CircularProgress />
-          </Box> : ''}
-          <Typography color='error' variant='h6'>{error ? error : ''}</Typography>
-          <Typography color='primary' variant='h6'>{success ? success : ''}</Typography>
-        </Box>
-      </Box>
-    </Container></>
+    <>
+      <div id="loading">
+        <div id="loading-center"></div>
+      </div>
+
+      <header id="main-header">
+        <div className="main-header">
+          <div className="container-fluid py-3">
+            <div className="row">
+              <div className="col-sm-12">
+                <nav className="navbar navbar-expand-lg navbar-light p-0">
+                  <a className="navbar-brand" href="/">
+                    {' '}
+                    <img
+                      className="img-fluid logo"
+                      src={logo}
+                      alt="Logo Rani"
+                    />{' '}
+                  </a>
+                </nav>
+                <div className="nav-overlay"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section className="page-title-box">
+        <div
+          className="container-fluid page-title"
+          style={{ paddingTop: 25 }}
+        ></div>
+      </section>
+
+      <section className="space-mtb">
+        <div className="container">
+          <div className="row justify-content-center align-items-center height-self-center">
+            <div className="col-lg-10 col-md-12 align-self-center">
+              <a className="btn btn-hover mb-5" href="/">
+                Voltar
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="container">
+          <div className="row justify-content-center align-items-center height-self-center">
+            <div className="col-lg-6 col-md-12 align-self-center">
+              <div className="sign-user_card ">
+                <div className="sign-in-page-data">
+                  <div className="sign-in-from w-100 m-auto">
+                    <form className="mt-4" action="#" onSubmit={handleSubmit}>
+                      <div className="form-group">
+                        <label>Informe o e-mail cadastrado abaixo.</label>
+                        <input
+                          type="email"
+                          className="form-control mb-0"
+                          id="email"
+                          onChange={handleEmail}
+                          autoComplete="off"
+                          name="email"
+                          value={email}
+                          required
+                        />
+                      </div>
+
+                      <Typography color="error">
+                        {error ? error : ''}
+                      </Typography>
+                      <Typography color="primary">
+                        {success ? success : ''}
+                      </Typography>
+
+                      <button
+                        type="submit"
+                        className="btn btn-hover w-100 mt-3"
+                      >
+                        Recuperar Senha
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
