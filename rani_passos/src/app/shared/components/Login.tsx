@@ -1,24 +1,7 @@
 import * as React from 'react';
 import { useAuthContext } from '../contexts';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-
 import { Navigate } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
 
 import logo from 'rani_passos/public/assets/images/logo.svg';
 
@@ -35,6 +18,7 @@ export const Login: React.FC = () => {
 
   const handleSubmit = async (event: React.BaseSyntheticEvent) => {
     event.preventDefault();
+    setError('');
     const message = await login(email, password);
     if (message && message?.includes('Request failed')) {
       setError('Ocorreu um erro na validação dos dados, tente novamente!');
@@ -46,6 +30,7 @@ export const Login: React.FC = () => {
     event.preventDefault();
     setEmail(event.target.value);
   };
+
   const handlePassword = (event: React.BaseSyntheticEvent) => {
     event.preventDefault();
     setPassword(event.target.value);
@@ -53,119 +38,110 @@ export const Login: React.FC = () => {
 
   return (
     <>
-      <AppBar
-        position="fixed"
-        sx={{
-          backgroundColor: 'background.paper',
-          color: '#000',
-          boxShadow: 'none',
-          borderBottom: '1px solid #ddd',
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-        }}
-      >
-        <Container maxWidth="lg">
-          <Toolbar>
-            <Box
-              component="img"
-              src={logo}
-              sx={{
-                height: 'auto',
-                width: 200,
-                display: 'flex',
-                color: 'inherit',
-              }}
-            />
+      <div id="loading">
+        <div id="loading-center"></div>
+      </div>
 
-            <Box
-              sx={{
-                flexGrow: 1,
-                display: { xs: 'none', md: 'flex' },
-                justifyContent: 'end',
-              }}
-            >
-              <Button
-                variant="contained"
-                sx={{ paddingLeft: '16px', paddingRight: '16px' }}
-                href="https://www.ranipassos.com.br/courses/assinatura-completa"
-                target="_blank"
-              >
-                Seja Assinante
-              </Button>
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
+      <header id="main-header">
+        <div className="main-header">
+          <div className="container-fluid py-3">
+            <div className="row">
+              <div className="col-sm-12">
+                <nav className="navbar navbar-expand-lg navbar-light p-0">
+                  <a className="navbar-brand" href="index.html">
+                    {' '}
+                    <img
+                      className="img-fluid logo"
+                      src={logo}
+                      alt="Logo Rani"
+                    />{' '}
+                  </a>
+                </nav>
+                <div className="nav-overlay"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
 
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 16,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Entrar
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-            <TextField
-              value={email}
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              autoFocus
-              onChange={handleEmail}
-              error={!!error}
-            />
-            <TextField
-              value={password}
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Senha"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={handlePassword}
-              error={!!error}
-            />
-            <Typography color="error">{error}</Typography>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 2, mb: 4 }}
-            >
-              Entrar
-            </Button>
-          </Box>
-          <Grid container>
-            <Grid
-              item
-              xs
-              style={{ display: 'flex', justifyContent: 'space-between' }}
-            >
-              <Link href="/esqueci" variant="body1" underline="none">
-                Esqueceu a senha?
-              </Link>
-              <Link href="/registro" variant="body1" underline="none">
-                Cadastre-se
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
-      </Container>
+      <section className="page-title-box">
+        <div
+          className="container-fluid page-title"
+          style={{ paddingTop: 25 }}
+        ></div>
+      </section>
+
+      <section className="space-mtb">
+        <div className="container">
+          <div className="row justify-content-center align-items-center height-self-center">
+            <div className="col-lg-5 col-md-12 align-self-center">
+              <div className="sign-user_card ">
+                <div className="sign-in-page-data">
+                  <div className="sign-in-from w-100 m-auto">
+                    <h3 className="mb-3 text-center">
+                      Iniciar sessão na sua conta
+                    </h3>
+                    <form className="mt-4" action="#" onSubmit={handleSubmit}>
+                      <div className="form-group">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          className="form-control mb-0"
+                          id="inputEmail"
+                          autoComplete="off"
+                          onChange={handleEmail}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Senha</label>
+                        <input
+                          type="password"
+                          className="form-control mb-0"
+                          id="inputPassword"
+                          onChange={handlePassword}
+                          required
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="btn btn-hover w-100 mt-3"
+                      >
+                        Entrar
+                      </button>
+                    </form>
+
+                    <div className="mt-2">
+                      <Typography color="error">{error}</Typography>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <div className="d-flex justify-content-center links">
+                    Não tem uma conta?{' '}
+                    <a href="/registro" className="text-primary ml-2">
+                      Cadastre-se
+                    </a>
+                  </div>
+                  <div className="d-flex justify-content-center links">
+                    <a href="/esqueci" className="f-link">
+                      Esqueceu-se da sua senha?
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div id="back-to-top">
+        <a className="top" href="#top" id="top">
+          {' '}
+          <i className="ri-eject-line"></i>{' '}
+        </a>
+      </div>
     </>
   );
 };
